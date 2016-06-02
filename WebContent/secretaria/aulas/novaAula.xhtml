@@ -1,0 +1,76 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	  
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Aulas</h1>
+	
+	<h:form id="formCadastrarAula">
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msgAula" closable="true"/>
+		</div>
+		<h:inputHidden value="#{aulaBean.aula.idAula}"/>
+		
+		<p:fieldset legend="Nova Aula" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+			
+				<h:outputLabel for="cbAno" value="Ano: *"/>
+				<p:selectOneMenu id="cbAno" value="#{aulaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+		            <f:selectItems value="#{aulaBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+		            <p:ajax update="cbTurma"  
+	                        listener="#{aulaBean.trocarTurma}" />	                
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbTurma" value="Turma: *"/>
+				<p:selectOneMenu id="cbTurma" value="#{aulaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+		            <f:selectItems value="#{aulaBean.turmaList}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+		            <p:ajax update="cbProfessor"  
+	                        listener="#{aulaBean.trocarProfessor}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbProfessor" value="Professor: *"/>
+				<p:selectOneMenu id="cbProfessor" value="#{aulaBean.idProfessorSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+		            <f:selectItems value="#{aulaBean.professorList}" var="professor" itemLabel="#{professor.nome}" itemValue="#{professor.idPessoa}" />
+		            <p:ajax update="cbDisciplina"  
+	                        listener="#{aulaBean.trocarDisciplina}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbDisciplina" value="Disciplina: *"/>
+				<p:selectOneMenu id="cbDisciplina" value="#{aulaBean.idDisciplinaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+		            <f:selectItems value="#{aulaBean.disciplinaList}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbDiaSemana" value="Dia da Semana: *"/>
+				<p:selectOneMenu id="cbDiaSemana" value="#{aulaBean.idDiaSemanaSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+		            <f:selectItems value="#{aulaBean.buscarTodosDiaSemana}" var="dia" itemLabel="#{dia.descricao}" itemValue="#{dia.idDiaSemana}" />
+		        </p:selectOneMenu>
+				
+				<h:outputLabel for="horaInicio" value="Hora Início: *"/>
+				<p:calendar id="horaInicio" value="#{aulaBean.aula.horaInicio}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5" required="true" requiredMessage="Escolha uma hora início!"/>
+				
+				<h:outputLabel for="horaFim" value="Hora Fim: *"/>
+				<p:calendar id="horaFim" value="#{aulaBean.aula.horaFim}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5" required="true" requiredMessage="Escolha uma hora fim!"/>
+				
+				
+		
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{aulaBean.salvar}" style="font-size:12px; margin: 0 5px 0 0" update=":formCadastrarAula:msgAula"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{aulaBean.cancelar}" immediate="true" style="font-size:12px;"/>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

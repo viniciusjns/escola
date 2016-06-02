@@ -1,0 +1,61 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Matriculas</h1>
+	
+	<h:form id="formCadastrarDisciplina">
+		<div style="font-size: 12px; width:400px;">
+			<p:messages closable="true"/>
+		</div>
+	
+		<h:inputHidden value="#{matriculaBean.matricula.idMatricula}"/>
+		<h:inputHidden value="#{matriculaBean.cpf}"/>
+		<h:inputHidden value="#{matriculaBean.aluno.idPessoa}"/>
+		
+		<p:fieldset legend="Nova Matrícula" style="font-size:12px; width:400px;">
+			<h:outputLabel for="alunoMatricula" value="Digite o cpf do aluno: "/>
+			<p:inputText id="alunoMatricula" value="#{matriculaBean.cpf}" maxlength="11"  required="true" requiredMessage="Digite o cpf do aluno!"/>
+			<p:commandButton value="Buscar" actionListener="#{matriculaBean.buscarAluno}" style="font-size: 12px;" ajax="false"/>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Nome do aluno: "/>
+				<h:outputLabel value="#{matriculaBean.aluno.nome}"/>
+				
+				<h:outputLabel value="CPF: "/>
+				<h:outputLabel value="#{matriculaBean.aluno.cpf}"/>
+				
+				<h:outputLabel value="Data de nascimento: "/>
+				<h:outputLabel value="#{matriculaBean.aluno.dataNascimento}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+			
+				<h:outputLabel for="turmaMatricula" value="Turma: "/>
+				<p:selectOneMenu id="turmaMatricula" value="#{matriculaBean.idTurma}" required="true" requiredMessage="Selecione uma turma!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{turmaBean.buscarTodos}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="situacaoMatricula" value="Situacao do aluno: "/>
+				<p:selectOneMenu id="situacaoMatricula" value="#{matriculaBean.idSituacao}" required="true" requiredMessage="Selecione uma situação!">
+		            <f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{situacaoAlunoBean.buscarTodos}" var="situacao" itemLabel="#{situacao.descricao}" itemValue="#{situacao.idSituacaoAluno}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel value="Ano: "/>
+		        <p:inputText value="#{matriculaBean.matricula.ano}" maxlength="4" size="4"/>
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<p:commandButton value="Salvar" action="#{matriculaBean.salvar}" style="font-size: 12px;" ajax="false"/>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,13 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+      
+	<h:head>
+		<meta http-equiv="Refresh" content="0;URL=#{loginBean.trocaLink()}"/>
+	</h:head>
+	
+	<h:body onload="PrimeFaces.monitorDownload(start, stop)">
+		<ui:include src="/resources/loader/loader.xhtml"/>
+	</h:body>
+</html>

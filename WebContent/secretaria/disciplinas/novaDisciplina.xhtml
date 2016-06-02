@@ -1,0 +1,36 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	  
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Disciplinas</h1>
+	
+	<h:form id="formCadastrarDisciplina">
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msgDisciplina" closable="true"/>
+		</div>
+		<h:inputHidden value="#{disciplinaBean.disciplina.idDisciplina}"/>
+		
+		<p:fieldset legend="Nova Disciplina" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+		
+				<h:outputLabel for="descDisciplina" value="Descrição: *"/>
+				<p:inputText id="descDisciplina" value="#{disciplinaBean.disciplina.descricao}" maxlength="50"  
+					required="true" requiredMessage="Preencha o campo descrição!" style="font-size: 12px;"/>
+		
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{disciplinaBean.salvar}" style="font-size:12px; margin: 0 5px 0 0" update=":formCadastrarDisciplina:msgDisciplina"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" immediate="true" action="#{disciplinaBean.cancelar}" style="font-size:12px;"/>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

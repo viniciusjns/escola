@@ -1,0 +1,93 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Adicionar Alunos</h1>
+
+	<h:form id="formAdd">
+	
+		<h:inputHidden value="#{matriculaBean.turma.idTurma}"/>
+	
+		<p:fieldset id="painelAdd" legend="Alunos não cadastrados na turma #{matriculaBean.turma.descricao}" style="font-size:12px; width:400px;">
+		
+			<p:dataTable id="tbAdd" var="aluno" value="#{matriculaBean.alunosNaoCadastrados}"  
+                 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum aluno encontrado"
+                 filteredValue="#{alunoBean.filteredAluno}"
+                 style="font-size: 12px; width:650px; text-align: center;">
+				<f:facet name="header">Lista de Alunos</f:facet>
+				
+				<p:column headerText="Código">
+					#{aluno.idPessoa}
+				</p:column>
+				
+				<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+					#{aluno.nome}
+				</p:column>
+							
+				<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+					#{aluno.cpf}
+				</p:column>
+				
+				<p:column headerText="Adicionar">
+					<p:commandButton value="Add" icon="ui-icon-plus" action="#{matriculaBean.salvar}" 
+							update=":formAdd:tbAdd :formList:tbList">
+						<f:setPropertyActionListener target="#{matriculaBean.aluno}" value="#{aluno}"/>
+					</p:commandButton>
+				</p:column>
+				
+			</p:dataTable>
+		
+		</p:fieldset>
+	</h:form>
+	
+	
+	<h:form id="formList">
+	
+		<h:inputHidden value="#{matriculaBean.turma.idTurma}"/>
+	
+		<p:fieldset id="painelList" legend="Alunos não cadastrados na turma #{matriculaBean.turma.descricao}" style="font-size:12px; width:400px;">
+		
+			<p:dataTable id="tbList" var="aluno" value="#{matriculaBean.alunosCadastrados}"  
+                 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum aluno encontrado"
+                 filteredValue="#{alunoBean.filteredAluno}"
+                 style="font-size: 12px; width:650px; text-align: center;">
+				<f:facet name="header">Lista de Alunos</f:facet>
+				
+				<p:column headerText="Código">
+					#{aluno.idPessoa}
+				</p:column>
+				
+				<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+					#{aluno.nome}
+				</p:column>
+							
+				<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+					#{aluno.cpf}
+				</p:column>
+				
+				<p:column headerText="Remover">
+					<p:commandButton value="Remover" icon="ui-icon-close" action="#{matriculaBean.excluir}" 
+							update=":formAdd:tbAdd :formList:tbList">
+						<f:setPropertyActionListener target="#{matriculaBean.aluno}" value="#{aluno}"/>
+					</p:commandButton>
+				</p:column>
+				
+			</p:dataTable>
+		
+		</p:fieldset>
+	</h:form>
+
+
+</ui:define>
+</ui:composition>

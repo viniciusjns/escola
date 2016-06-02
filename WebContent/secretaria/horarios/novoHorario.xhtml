@@ -1,0 +1,48 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	  
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Horários</h1>
+	
+	<h:form id="formCadastrarHorario">
+		<div style="font-size: 12px; width:400px;">
+			<p:growl closable="true"/>
+		</div>
+		<h:inputHidden value="#{horarioBean.horario.idHorario}"/>
+		
+		<p:fieldset legend="Novo Horário" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+		
+				<h:outputLabel for="descHorario" value="Descrição: *"/>
+				<p:inputText id="descHorario" value="#{horarioBean.horario.descricao}" maxlength="50"  
+					required="true" requiredMessage="Preencha o campo descrição!" style="font-size: 12px;"/>
+				
+				<h:outputLabel for="horaInicio" value="Hora Início: *"/>
+				<p:calendar id="horaInicio" value="#{horarioBean.horario.horaInicio}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5" required="true" requiredMessage="Escolha uma hora início!"/>
+				
+				<h:outputLabel for="horaFim" value="Hora Fim: *"/>
+				<p:calendar id="horaFim" value="#{horarioBean.horario.horaFim}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5" required="true" requiredMessage="Escolha uma hora fim!"/>
+				
+				<h:outputLabel for="turnoTurma" value="Turno: *"/>
+				<p:selectOneMenu id="turnoTurma" value="#{horarioBean.idTurnoSelecionado}" required="true" requiredMessage="Selecione um turno!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{turmaBean.buscarTurno}" var="turno" itemLabel="#{turno.descricao}" itemValue="#{turno.idTurno}" />
+		        </p:selectOneMenu>
+		
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{horarioBean.salvar}" style="font-size:12px; margin: 0 5px 0 0" ajax="false"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" immediate="true" process="@this"  action="#{horarioBean.cancelar}" style="font-size:12px;"/>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,112 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Adicionar Alunos</h1>
+
+	<h:form id="formAdd">
+		<div style="font-size: 12px;">
+			<p:growl id="msgAddAlunos" closable="true"/>
+		</div>
+	
+		<h:inputHidden value="#{alunoTurmaBean.turma.idTurma}"/>
+	
+		<p:fieldset id="painelAdd" legend="Alunos não cadastrados na turma #{alunoTurmaBean.turma.descricao}" style="font-size:12px; width:400px;">
+		
+			<p:dataTable id="tbAdd" var="aluno" value="#{alunoTurmaBean.alunoDataModel}"  
+                 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum aluno encontrado"
+                 filteredValue="#{alunoBean.filteredAluno}"
+                 selection="#{alunoTurmaBean.alunoList}"
+                 rowKey="#{aluno.idPessoa}"
+                 style="font-size: 12px; width:650px; text-align: center;">
+                 
+				<f:facet name="header">Lista de Alunos</f:facet>
+				
+				<p:column selectionMode="multiple" style="width:2%" />
+				
+				<p:column headerText="Código">
+					#{aluno.idPessoa}
+				</p:column>
+				
+				<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+					#{aluno.nome}
+				</p:column>
+							
+				<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+					#{aluno.cpf}
+				</p:column>
+			</p:dataTable>
+            
+            <p:commandButton id="btn" icon="ui-icon-check" value="Salvar" action="#{alunoTurmaBean.salvar}" 
+            	update=":formAdd:tbAdd :formAdd:msgAddAlunos :formList:tbList" style="margin: 5px 0 0 0;"/>
+            
+		
+		</p:fieldset>
+	
+	</h:form>
+	
+	<h:form id="formList">
+		<h:inputHidden value="#{alunoTurmaBean.turma.idTurma}"/>
+		
+		<p:fieldset id="painelList" legend="Alunos cadastrados na turma #{alunoTurmaBean.turma.descricao}" style="font-size:12px; width:400px; margin: 10px 0 10px 0">
+		
+		
+			<p:dataTable id="tbList" value="#{alunoTurmaBean.alunosCadastrados}" var="alunoTurma"
+				 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum aluno encontrado"
+                 filteredValue="#{alunoBean.filteredAluno}"
+                 rowIndexVar="a"
+                 style="font-size: 12px; width:653px; text-align: center;">
+                 
+                <p:column headerText="Ativo">
+                	<p:commandLink action="#{alunoTurmaBean.ativarDesativar}" update=":formList:tbList">
+                		<p:graphicImage library="imagens" name="cadeado_#{alunoTurma.ativo}.png"/>
+                		<f:setPropertyActionListener target="#{alunoTurmaBean.alunoTurma}" value="#{alunoTurma}"/>
+                	</p:commandLink>
+                </p:column> 
+			
+				<p:column headerText="Número">
+					#{a+1}
+				</p:column>
+				
+				<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+					#{alunoTurma.aluno.nome}
+				</p:column>
+				
+				<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+					#{alunoTurma.aluno.cpf}
+				</p:column>
+				
+				<p:column headerText="Excluir">
+					<p:commandLink action="#{alunoTurmaBean.excluir}" 
+						update=":formAdd:tbAdd :formAdd:msgAddAlunos :formList:tbList">
+						<p:graphicImage library="imagens" name="excluir.png"/>
+						<f:setPropertyActionListener target="#{alunoTurmaBean.aluno}" value="#{alunoTurma.aluno}"/>
+						<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+		        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+		        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+		    </p:confirmDialog>
+		
+		</p:fieldset>
+		
+	</h:form>
+
+
+</ui:define>
+</ui:composition>

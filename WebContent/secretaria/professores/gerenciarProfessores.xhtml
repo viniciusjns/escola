@@ -1,0 +1,90 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Professores</h1>
+	
+	<h:form id="formNovoProfessor">
+		<p:commandButton value="Novo Professor" action="#{professorBean.novoProfessor}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px; margin: 0 0 5px 0"/>
+	</h:form>
+	
+	<h:form id="formListarProfessores">
+		<div style="font-size: 12px;">
+			<p:growl id="msgProfessor"/>
+		</div>
+		
+		<p:dataTable id="tabela" var="professor" value="#{professorBean.buscarTodos}"  
+                 paginator="true" rows="10"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="10,25,50,100"
+                 emptyMessage="Nenhum professor encontrado"
+                 filteredValue="#{professorBean.filteredProfessor}"
+                 style="font-size: 12px; text-align: center;">
+			<f:facet name="header">Professores Cadastrados</f:facet>
+			
+			<p:column headerText="Código">
+				#{professor.idPessoa}
+			</p:column>
+			
+			<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+				#{professor.nome}
+			</p:column>
+			
+			<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+				#{professor.cpf}
+			</p:column>
+			
+			<p:column headerText="Graduação" filterBy="graduacao.descricao" filterOptions="#{professorBean.filteredGraduacao}" filterMatchMode="exact">
+				#{professor.graduacao.descricao}
+			</p:column>
+			
+			<p:column headerText="Consultar">
+				<p:commandLink oncomplete="consultarDialog.show();" update=":formListarProfessores:modalDialog">
+					<h:graphicImage library="imagens" name="buscar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{professorBean.professor}" value="#{professor}"/>
+				</p:commandLink>
+			</p:column>			
+			
+			<p:column headerText="Editar">
+				<h:commandLink action="#{professorBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{professorBean.professor}" value="#{professor}"/>
+					<f:setPropertyActionListener target="#{professorBean.endereco}" value="#{professor.endereco}"/>
+					<f:setPropertyActionListener target="#{professorBean.telefone1}" value="#{professor.telefones[0]}"/>
+					<f:setPropertyActionListener target="#{professorBean.telefone2}" value="#{professor.telefones[1]}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column headerText="Excluir">
+				<p:commandLink action="#{professorBean.excluir}" update=":formListarProfessores:tabela, :formListarProfessores:msgProfessor">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{professorBean.professor}" value="#{professor}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Adicionar Disciplina">
+				<p:commandLink action="#{professorDisciplinaBean.addDisciplina}">
+					<h:graphicImage library="imagens" name="adicionar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{professorDisciplinaBean.professor}" value="#{professor}"/>
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+	    
+	    <ui:include src="/secretaria/professores/infoProfessorDialog.xhtml"></ui:include>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

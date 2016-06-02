@@ -1,0 +1,96 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Turmas</h1>
+	
+	<h:form id="formNovaTurma">
+		<p:commandButton value="Nova Turma" action="#{turmaBean.novaTurma}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px; margin: 0 0 5px 0"/>
+	</h:form>
+	
+	<h:form id="formListarTurmas">
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msgTurma" closable="true"/>
+		</div>
+		
+		<p:dataTable id="dataTable" var="turma" value="#{turmaBean.buscarTodos}"  
+                 paginator="true" rows="10"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="10,25,50,100"
+                 emptyMessage="Nenhuma turma encontrada"
+                 filteredValue="#{turmaBean.filteredTurma}"
+                 style="font-size: 12px; text-align: center; float: left; display: block;">
+			
+			<f:facet name="header">Turmas Cadastradas</f:facet>
+			
+			<p:column headerText="Código">
+				#{turma.idTurma}
+			</p:column>
+			
+			<p:column headerText="Descrição" filterBy="descricao" filterMatchMode="contains">
+				#{turma.descricao}
+			</p:column>
+			
+			<p:column headerText="Sala" filterBy="sala" filterMatchMode="contains">
+				#{turma.sala}
+			</p:column>
+			
+			<p:column headerText="Turno" filterBy="turno.descricao" filterMatchMode="contains">
+				#{turma.turno.descricao}
+			</p:column>
+			
+			<p:column headerText="Série" filterBy="serie.descricao" filterMatchMode="contains">
+				#{turma.serie.descricao}
+			</p:column>
+			
+			<p:column headerText="Ano">
+				#{turma.ano.descricao}
+			</p:column>
+			
+			<p:column headerText="Editar">
+				<h:commandLink action="#{turmaBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{turmaBean.turma}" value="#{turma}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column headerText="Excluir">
+				<p:commandLink action="#{turmaBean.excluir}" update=":formListarTurmas:dataTable :formListarTurmas:msgTurma">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{turmaBean.turma}" value="#{turma}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Adicionar Alunos">
+				<p:commandLink action="#{alunoTurmaBean.addAlunos}">
+					<h:graphicImage library="imagens" name="adicionar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{alunoTurmaBean.turma}" value="#{turma}"/>
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Adicionar Professores">
+				<p:commandLink action="#{professorTurmaBean.addProfessores}">
+					<h:graphicImage library="imagens" name="adicionar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{professorTurmaBean.turma}" value="#{turma}"/>
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+	    
+	</h:form>
+	
+	
+
+</ui:define>
+</ui:composition>

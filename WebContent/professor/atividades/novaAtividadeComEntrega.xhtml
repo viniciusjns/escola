@@ -1,0 +1,88 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Atividade Com Entrega</h1>
+	
+	<h:form id="formCadastrarAtividade" enctype="multipart/form-data">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgAtividade"/>
+		</div>
+	
+		<h:inputHidden value="#{atividadeComEntregaBean.atividadeComEntrega.idAtividade}"/>
+	
+		<p:fieldset legend="Atividade Com Entrega" style="font-size:12px; width:700px;">
+		
+			<h:panelGrid columns="2">
+		        
+		        <h:outputLabel for="tituloAtividade" value="Título: *"/>
+		        <p:inputText id="tituloAtividade" value="#{atividadeComEntregaBean.atividadeComEntrega.titulo}" size="50" maxlength="45" required="true" requiredMessage="Preencha o campo título!"/>
+		        
+		        <h:outputLabel for="valorAtividade" value="Valor: *"/>
+		        <p:inputText id="valorAtividade" value="#{atividadeComEntregaBean.atividadeComEntrega.valor}" size="10" required="true" requiredMessage="Preencha o campo valor!"/>
+		        
+		        <h:outputLabel for="anoAtividade" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="anoAtividade" value="#{atividadeComEntregaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodoAtividade"  
+	                        listener="#{atividadeComEntregaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbAtvTurma"  
+	                        listener="#{atividadeComEntregaBean.trocarTurmaProfessor}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbPeriodoAtividade" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodoAtividade" value="#{atividadeComEntregaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeComEntregaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>      
+		        
+		        <h:outputLabel for="cbAtvTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbAtvTurma" value="#{atividadeComEntregaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeComEntregaBean.turmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			        <p:ajax update="cbAtvDisciplina"  
+	                        listener="#{atividadeComEntregaBean.trocarDisciplina}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbAtvDisciplina" value="Selecione a disciplina: *"/>
+				<p:selectOneMenu id="cbAtvDisciplina" value="#{atividadeComEntregaBean.idDisciplinaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeComEntregaBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+			    </p:selectOneMenu>
+				
+				<h:outputLabel for="dataFim" value="Data Fim: *"/>
+				<p:calendar value="#{atividadeComEntregaBean.atividadeComEntrega.dataFim}" id="dataFim" locale="pt_BR"
+										 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014" required="true" requiredMessage="Escolha uma data fim!" size="10" maxlength="10"/>
+				
+				<h:outputLabel for="horaFim" value="Hora Fim: *"/>
+				<p:calendar id="horaFim" value="#{atividadeComEntregaBean.atividadeComEntrega.horaFim}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5" required="true" requiredMessage="Escolha uma hora fim!"/>
+				
+				<h:outputLabel for="atDescricao" value="Descrição: "/>
+				<p:inputTextarea id="atDescricao" value="#{atividadeComEntregaBean.atividadeComEntrega.descricao}" rows="5" cols="50"/>
+				
+				<h:outputLabel value="Arquivo: "/>
+				<p:fileUpload value="#{atividadeComEntregaBean.uploadedFile}" mode="simple"/>
+			
+			</h:panelGrid>
+		
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton icon="ui-icon-check" value="Salvar" action="#{atividadeComEntregaBean.salvar}" style="font-size: 12px; margin: 0 5px 10px 0;" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+		<p:commandButton icon="ui-icon-cancel" value="Cancelar" action="#{atividadeComEntregaBean.cancelar}" immediate="true" style="font-size: 12px;"/>
+		
+		
+	</h:form>
+	
+	
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,83 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+	<h1 id="titulo">Gerenciar Aulas</h1>
+	
+	<h:form id="formNovaAula">
+		<p:commandButton value="Nova Aula" action="#{aulaBean.novaAula}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size:12px; margin: 0 0 5px 0"/>
+	</h:form>
+	
+	<h:form id="formListarAulas">
+		<div style="font-size: 12px;">
+			<p:growl id="msgAula"/>
+		</div>
+		
+		<p:dataTable id="dataTable" var="aula" value="#{aulaBean.aulaList}"  
+               paginator="true" rows="10"  
+               paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+               rowsPerPageTemplate="10,25,50,100"
+               emptyMessage="Nenhuma aula encontrada"
+               filteredValue="#{aulaBean.filteredAula}"
+               style="font-size: 12px; text-align: center; margin-left:0;">
+                 
+			<f:facet name="header">Aulas Cadastradas</f:facet>
+			
+			<p:column headerText="Código">
+				#{aula.idAula}
+			</p:column>
+			
+			<p:column headerText="Hora Inicio/Fim">
+				#{aula.horaInicio} / #{aula.horaFim}
+			</p:column>
+			
+			<p:column headerText="Professor" filterBy="professorTurma.professorDisciplina.professor.nome" filterMatchMode="contains">
+				#{aula.professorTurma.professorDisciplina.professor.nome}
+			</p:column>
+			
+			<p:column headerText="Disciplina" filterBy="professorTurma.professorDisciplina.disciplina.descricao" filterMatchMode="contains">
+				#{aula.professorTurma.professorDisciplina.disciplina.descricao}
+			</p:column>
+			
+			<p:column headerText="Turma" filterBy="professorTurma.turma.descricao" filterMatchMode="contains">
+				#{aula.professorTurma.turma.descricao}
+			</p:column>
+			
+			<p:column headerText="Ano" filterBy="professorTurma.turma.ano.descricao" filterMatchMode="contains">
+				#{aula.professorTurma.turma.ano.descricao}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Editar</f:facet>
+				<h:commandLink action="#{aulaBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{aulaBean.aula}" value="#{aula}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Excluir</f:facet>
+				<p:commandLink action="#{aulaBean.excluir}" update=":formListarAulas, :formListarAulas:msgAula">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{aulaBean.aula}" value="#{aula}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+		
+		
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

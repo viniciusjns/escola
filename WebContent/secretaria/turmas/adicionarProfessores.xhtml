@@ -1,0 +1,99 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Adicionar Professores</h1>
+
+	<h:form id="formAdd">
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msgPt" closable="true"/>
+		</div>
+	
+		<h:inputHidden value="#{professorTurmaBean.turma.idTurma}"/>
+		<h:inputHidden value="#{professorTurmaBean.pt.idProfessorTurma}"/>
+	
+		<p:fieldset id="painelAdd" legend="Selecionar professor e disciplina" style="font-size:12px; width:400px;">
+		
+			<h:panelGrid columns="2">
+			
+				<h:outputLabel value="Selecione um professor: "/>
+				<p:selectOneMenu id="cbProfessor" value="#{professorTurmaBean.idProfessor}">  
+	                <f:selectItem itemLabel="" itemValue=""/> 
+	                <f:selectItems value="#{professorTurmaBean.professores}" var="professor" itemLabel="#{professor.nome}" itemValue="#{professor.idPessoa}"/>  
+	                <p:ajax update="cbDisciplina"  
+	                        listener="#{professorTurmaBean.trocarDisciplina}" />  
+	            </p:selectOneMenu>
+	            
+	            <h:outputLabel value="Selecione uma disciplina: "/>
+	            <p:selectOneMenu id="cbDisciplina" value="#{professorTurmaBean.idDisciplina}">  
+	                <f:selectItem itemLabel="" itemValue="" />
+	                <f:selectItems value="#{professorTurmaBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}"/>  
+	            </p:selectOneMenu>
+            
+			</h:panelGrid>
+			
+			<p:commandButton value="Salvar" icon="ui-icon-check" action="#{professorTurmaBean.salvar}"
+					update=":formAdd :formList:tbList"/>
+		</p:fieldset>
+	
+	</h:form>
+	
+	<h:form id="formList">
+		<h:inputHidden value="#{alunoTurmaBean.turma.idTurma}"/>
+		
+		<p:fieldset id="painelList" legend="Professores cadastrados na turma #{professorTurmaBean.turma.descricao}" style="font-size:12px; width:400px; margin: 10px 0 10px 0">
+		
+			<p:dataTable id="tbList" value="#{professorTurmaBean.professorTurmaList}" var="pt"
+				 paginator="true" rows="5"
+				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum professor encontrado"
+                 filteredValue="#{professorBean.filteredProfessor}"
+                 style="font-size: 12px; width:650px; text-align: center;">
+                
+                <p:column headerText="Ativo">
+                	<p:commandLink action="#{professorTurmaBean.ativarDesativar}" update=":formList:tbList">
+                		<p:graphicImage library="imagens" name="cadeado_#{pt.ativo}.png"/>
+                		<f:setPropertyActionListener target="#{professorTurmaBean.pt}" value="#{pt}"/>
+                	</p:commandLink>
+                </p:column>
+			
+				<p:column headerText="Código">
+					#{pt.idProfessorTurma}
+				</p:column>
+				
+				<p:column headerText="Professor" filterBy="professorDisciplina.professor.nome" filterMatchMode="contains">
+					#{pt.professorDisciplina.professor.nome}
+				</p:column>
+				
+				<p:column headerText="Disciplina">
+					#{pt.professorDisciplina.disciplina.descricao}
+				</p:column>
+				
+				<p:column headerText="Excluir">
+					<p:commandLink action="#{professorTurmaBean.excluir}" update=":formAdd:msgPt :formList:tbList">
+						<h:graphicImage library="imagens" name="excluir.png"/>
+						<f:setPropertyActionListener target="#{professorTurmaBean.pt}" value="#{pt}"/>
+						<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+		        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+		        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+		    </p:confirmDialog>
+		
+		</p:fieldset>
+		
+	</h:form>
+
+
+</ui:define>
+</ui:composition>

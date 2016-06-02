@@ -1,0 +1,82 @@
+<ui:composition template="/aluno/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Consultar Frequência</h1>
+	
+	<h:form id="formFaltas">
+	
+		<p:fieldset id="fieldFaltas" legend="Consultar Frequência" style="font-size: 12px; margin-top: 10px;">
+		
+			<h:panelGrid id="painel" columns="2">
+			
+				<h:outputLabel for="cbAno" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="cbAno" value="#{faltaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodo"  
+	                        listener="#{faltaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbTurma"  
+	                        listener="#{faltaBean.trocarTurmaAluno}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbPeriodo" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodo" value="#{faltaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbTurma" value="#{faltaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.alunoTurmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <p:commandButton value="Buscar" action="#{faltaBean.listarFaltas}" icon="ui-icon-search" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formFaltas:tabelaFaltas :dialog"/>
+			
+			</h:panelGrid>
+			
+			<h4 style="color: red; font-size: 11px;">Campos marcados com * são obrigatórios</h4>
+		
+		</p:fieldset>
+		
+		<p:fieldset legend="Faltas" style="font-size: 12px; margin: 10px 0 10px 0;">
+		
+			<p:dataTable id="tabelaFaltas" var="falta" value="#{faltaBean.faltasAluno}"
+				paginator="true" rows="10"  
+	            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	            rowsPerPageTemplate="10,25,50,100"
+                emptyMessage="Nenhuma falta encontrada"
+                style="font-size: 12px; text-align: center; margin-bottom: 5px;">
+                 
+                 <p:column headerText="Data" sortBy="#{falta.data}">
+                 	<h:outputLabel value="#{falta.data}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+                 </p:column>
+                 
+                 <p:column headerText="Professor" sortBy="#{falta.aula.professorTurma.professorDisciplina.professor.nome}">
+                 	#{falta.aula.professorTurma.professorDisciplina.professor.nome}
+                 </p:column>
+                 
+                 <p:column headerText="Disciplina" sortBy="#{falta.aula.professorTurma.professorDisciplina.disciplina.descricao}">
+                 	#{falta.aula.professorTurma.professorDisciplina.disciplina.descricao}
+                 </p:column>
+                 
+                 <p:column headerText="Hora Inicio/Fim">
+                 	#{falta.aula.horaInicio} / #{falta.aula.horaFim}
+                 </p:column>
+            
+            </p:dataTable>
+        
+        </p:fieldset>
+	
+	</h:form>
+
+</ui:define>
+</ui:composition>

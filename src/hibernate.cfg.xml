@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC 
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/escola</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="current_session_context_class">thread</property>
+		<!-- <property name="show_sql">true</property>
+		<property name="format_sql">true</property>-->
+		
+		
+		<mapping class="entities.Aluno"/>
+		<mapping class="entities.Professor"/>
+		<mapping class="entities.Pessoa"/>
+		<mapping class="entities.Endereco"/>
+		<mapping class="entities.Telefone"/>
+		<mapping class="entities.Sexo"/>
+		<mapping class="entities.Uf"/>
+		<mapping class="entities.Usuario"/>
+		<mapping class="entities.Permissao"/>
+		<mapping class="entities.Disciplina"/>
+		<mapping class="entities.Turma"/>
+		<mapping class="entities.PeriodoLetivo"/>
+		<mapping class="entities.Graduacao"/>
+		<mapping class="entities.ProfessorDisciplina"/>
+		<mapping class="entities.Ano"/>
+		<mapping class="entities.Turno"/>
+		<mapping class="entities.AlunoTurma"/>
+		<mapping class="entities.ProfessorTurma"/>
+		<mapping class="entities.Atividade"/>
+		<mapping class="entities.AtividadeComEntrega"/>
+		<mapping class="entities.AtividadeSemEntrega"/>
+		<mapping class="entities.Entrega"/>
+		<mapping class="entities.Nota"/>
+		<mapping class="entities.Aula"/>
+		<mapping class="entities.Serie"/>
+		<mapping class="entities.DiaSemana"/>
+		<mapping class="entities.Falta"/>
+		
+    </session-factory>
+</hibernate-configuration>

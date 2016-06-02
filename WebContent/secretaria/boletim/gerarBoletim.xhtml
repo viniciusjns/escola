@@ -1,0 +1,94 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+	<h1 id="titulo">Gerar Boletim</h1>
+	
+	<h:form id="formBoletim">
+	
+		<p:fieldset legend="Boletim">
+		
+			<h:panelGrid columns="2">
+			
+				<h:outputLabel for="anoAtividade" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="anoAtividade" value="#{boletimBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+	                <p:ajax update="cbAtvTurma"  
+	                        listener="#{boletimBean.trocarTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbAtvTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbAtvTurma" value="#{boletimBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{boletimBean.turmaList}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="obs" value="Observações: "/>
+			    <p:inputTextarea id="obs" value="#{boletimBean.observacao}" rows="5" cols="50" />
+			    
+			    <ui:remove><h:outputLabel value="Selecione o(s) período(s) letivo(s): *"/>
+			    <p:dataTable id="tabelaPeriodo" value="#{boletimBean.periodoLetivoDataModel}" var="periodo"
+						 selection="#{boletimBean.periodoList}"
+						 rowKey="#{periodo.idPeriodoLetivo}"
+						 emptyMessage="Nenhum período letivo encontrado"
+						 style="font-size: 12px; width:400px; text-align: center;">
+						 
+					<f:facet name="header">Períodos Letivos</f:facet>
+				
+					<p:column selectionMode="multiple" style="width:2%" />
+					
+					<p:column headerText="Código">
+						#{periodo.idPeriodoLetivo}
+					</p:column>
+					
+					<p:column headerText="Descrição">
+						#{periodo.descricao}
+					</p:column>
+					
+					<p:column headerText="Ano">
+						#{periodo.ano.descricao}
+					</p:column>
+				
+				</p:dataTable></ui:remove>
+			
+			
+			</h:panelGrid>
+			
+			<p:commandButton icon="ui-icon-search" value="Buscar Alunos" action="#{boletimBean.buscarAlunos}" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formBoletim:tabelaAluno :dialog" style="margin: 0 0 5px 0"/>
+			
+			<p:dataTable id="tabelaAluno" value="#{boletimBean.alunoTurmaList}" var="at"
+						 rendere="#{!empty boletimBean.alunoTurmaList}"
+						 emptyMessage="Nenhum aluno encontrado"
+						 rowIndexVar="a"
+						 style="font-size: 12px; width:400px; text-align: center;">
+				
+				<f:facet name="header">Alunos</f:facet>
+				
+				<p:column headerText="Número">
+					#{a+1}
+				</p:column>
+				
+				<p:column headerText="Nome">
+					#{at.aluno.nome}
+				</p:column>
+				
+				<p:column headerText="Gerar Boletim">
+					<p:commandLink action="#{boletimBean.gerarBoletim}">
+						<f:setPropertyActionListener target="#{boletimBean.alunoTurma}" value="#{at}"/>
+						<h:graphicImage library="imagens" name="report.png"/>
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+		
+		</p:fieldset>
+	
+	</h:form>
+	
+</ui:define>
+</ui:composition>

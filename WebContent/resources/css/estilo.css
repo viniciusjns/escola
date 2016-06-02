@@ -1,0 +1,137 @@
+body {
+	font-family: arial;
+	font-size: 12px;
+	background: url(#{resource['imagens:bg3.jpg']}) no-repeat;
+}
+
+#principal{
+	display: table;
+	width: 1240px;
+	height: auto;
+	margin: 0 auto;
+}
+
+#topo {
+	float: left;
+	display: block; 
+	width: 1240px;
+	height: 100px;
+	background-color: #fff;
+}
+
+#infoTopo {
+	float: right;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 10px 10px 0 0;
+	width: auto;
+	border: solid 1px #fff;
+}
+
+#infoTopoTxt {
+	float: right;
+	display: block;
+	border: solid 1px #fff;
+}
+
+#infoTopo #sair {
+	color: red;
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration:underline; 
+	cursor: pointer;
+}
+
+#infoTopo .trocarSenha {
+	color: #0F80B3;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: arial;
+	text-decoration: none;
+}
+
+#rodape {
+	float: left;
+	display: block; 
+	width: 1240px;
+	height: 50px;
+	background-color: #fff;
+}
+
+#menu {
+	float: left;
+	display: block; 
+
+	width: 230px;
+	height: 500px;
+	margin: 10px 10px 0 0;
+	background-color: #fff;
+}
+
+#menuprincipal {
+	float: left;
+	display: block;
+	/*border: #000 solid 1px;*/
+}
+
+#menuprincipal ul {
+	float: left;
+	display: block;
+	width: 230px;
+	padding: 0;
+	margin: 0;
+	/*border: #000 solid 1px;*/
+}
+
+#menuprincipal li {
+	background-color: #0F80B3;
+	list-style: none;
+	margin: 0 2px 5px 2px;
+	text-align: center;
+	height: 30px;
+}
+
+#menuprincipal li:hover {
+	background-color:#8DBFE0;
+}
+
+#menuprincipal a {
+	float: left;
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	line-height: 30px;
+	width: 230px;
+	height: 30px;
+	font-family: arial;
+	font-size: 12px;
+}
+
+#menuprincipal a:hover {
+}
+
+#conteudo {
+	float: left;
+	display: table; 
+	width: 980px;
+	height: 500px;
+	margin: 10px 0 10px 0;
+	padding: 0 10px 0 10px;
+	background-color: #fff;
+	
+}
+
+#titulo {
+	float: left;
+	display: block;
+	font-size: 20px;
+	width: 980px;
+	border-bottom: solid 1px #000;
+}
+
+#menutitulo {
+	text-align: center;
+	font-size: 20px;
+	color: #0F80B3;
+}

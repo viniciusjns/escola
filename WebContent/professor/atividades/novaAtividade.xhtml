@@ -1,0 +1,74 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Atividades</h1>
+	
+	<h:form id="formCadastrarAtividade" enctype="multipart/form-data">
+	
+		<h:inputHidden value="#{atividadeBean.atividade.idAtividade}"/>
+	
+		<p:fieldset legend="Nova atividade" style="font-size:12px; width:700px;">
+		
+			<h:panelGrid id="painelSemEntrega" columns="2">
+			
+				<h:outputLabel for="tipoAtividade" value="Selecione o tipo de atividade: "/>
+				<p:selectOneRadio id="tipoAtividade" value="#{atividadeBean.idTipoAtividade}">  
+		            <f:selectItem itemLabel="Com entrega" itemValue="1" />  
+		            <f:selectItem itemLabel="Sem entrega" itemValue="2" />
+		            <p:ajax update="painelComEntrega" event="change"/>
+		        </p:selectOneRadio>
+		        
+		        <h:outputLabel for="tituloAtividade" value="Título: "/>
+		        <p:inputText id="tituloAtividade" value="#{atividadeBean.atividade.titulo}" size="50" maxlength="50"/>
+		        
+		        <h:outputLabel for="valorAtividade" value="Valor: "/>
+		        <p:inputText id="valorAtividade" value="#{atividadeBean.atividade.valor}" size="10"/>        
+		        
+		        <h:outputLabel for="cbAtvTurma" value="Selecione a turma: "/>
+				<p:selectOneMenu id="cbAtvTurma" value="#{atividadeBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeBean.buscarTurmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			        <p:ajax update="cbAtvDisciplina"  
+	                        listener="#{atividadeBean.trocarDisciplina}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbAtvDisciplina" value="Selecione a disciplina: "/>
+				<p:selectOneMenu id="cbAtvDisciplina" value="#{atividadeBean.idDisciplinaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+			    </p:selectOneMenu>
+			    
+			
+			</h:panelGrid>
+			
+			<p:outputPanel id="painelComEntrega">
+			<h:panelGrid columns="2" rendered="#{atividadeBean.idTipoAtividade == 1}" width="500">
+				
+				<h:outputLabel for="dataFim" value="Data Fim:"/>						 
+				<p:calendar value="#{atividadeBean.atividade.dataFim}" id="dataFim" locale="pt_BR"
+										 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014" required="true" requiredMessage="Preencha a data fim!" size="10" maxlength="10"/>
+				
+				<h:outputLabel for="horaFim" value="Hora Fim:"/>
+				<p:calendar id="horaFim" value="#{atividadeBean.atividade.horaFim}" pattern="HH:mm" timeOnly="true" size="10" maxlength="5"/>
+				
+				<h:outputLabel for="atDescricao" value="Descrição:"/>
+				<p:inputTextarea id="atDescricao" value="#{atividadeBean.atividade.descricao}" rows="5" cols="50"/>
+				
+				<h:outputLabel value="Arquivo:"/>
+				<p:fileUpload value="#{atividadeBean.uploadedFile}" mode="simple"/>
+		
+		<p:commandButton value="Salvar" action="#{atividadeBean.salvar}" ajax="false"/>
+		
+		
+	</h:form>
+	
+	
+
+</ui:define>
+</ui:composition>

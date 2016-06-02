@@ -1,0 +1,77 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Matriculas</h1>
+	
+	<h:form id="formNovaMatricula">
+		<p:commandButton value="Nova Matricula" action="#{matriculaBean.novaMatricula}" style="font-size: 12px;"/>
+	</h:form>
+	
+	<h:form id="formListarMatriculas">
+		
+		<p:dataTable id="dataTable" var="matricula" value="#{matriculaBean.buscarTodas}"  
+                 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhuma matrícula cadastrada"
+                 style="font-size: 12px; width:400px; text-align: center;">
+			<f:facet name="header">Matriculas de Cadastradas</f:facet>
+			
+			<p:column>
+				<f:facet name="header">Nome</f:facet>
+				#{matricula.aluno.nome}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Turma</f:facet>
+				#{matricula.turma.descricao}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Ano</f:facet>
+				#{matricula.ano}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Situação</f:facet>
+				#{matricula.situacaoAluno.descricao}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Editar</f:facet>
+				<h:commandLink action="#{matriculaBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{matriculaBean.matricula}" value="#{matricula}"/>
+					<f:setPropertyActionListener target="#{matriculaBean.cpf}" value="#{matricula.aluno.cpf}"/>
+					<f:setPropertyActionListener target="#{matriculaBean.aluno}" value="#{matricula.aluno}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Excluir</f:facet>
+				<p:commandLink action="#{matriculaBean.excluir}" update=":formListarMatriculas">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{matriculaBean.matricula}" value="#{matricula}"/>
+					<p:confirm header="Confirmation" message="Deseja excluir dados?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+		
+	</h:form>
+	
+	
+</ui:define>
+</ui:composition>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Insert title here</title>
+</h:head>
+<h:body>
+
+	<p:dialog id="senhaDialog" header="Trocar senha do usuário #{senhaBean.usuario.pessoa.nome}" draggable="false" resizable="false"  
+	widgetVar="senhaDialog" modal="true" showEffect="fade" hideEffect="fade" style="font-size: 12px; float: left; display: block;">  
+	    
+	    <p:growl id="msgDialog" style="font-size: 12px;"/>
+	    
+	    <p:fieldset id="fieldDialog" legend="Trocar Senha">
+	    
+	    	<h:panelGrid columns="2">
+	    	
+	    		<h:outputLabel value="Nova senha: "/>
+	    		<p:password id="novaSenha" value="#{senhaBean.novaSenha}" size="15" maxlength="8" />
+	    		
+	    		<h:outputLabel value="Repetir senha: "/>
+	    		<p:password id="repSenha" value="#{senhaBean.repetirSenha}" size="15" maxlength="8" />
+	    		
+	    		<p:commandButton icon="ui-icon-check" value="Salvar" action="#{senhaBean.salvar}" update=":form:msgDialog :form:novaSenha :form:repSenha">
+	    			<p:resetInput target=":form:novaSenha :form:repSenha"/>
+	    		</p:commandButton>
+	    	
+	    	</h:panelGrid>
+	    
+	    </p:fieldset>
+	    
+	    
+	</p:dialog>
+
+</h:body>
+</html>

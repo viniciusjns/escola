@@ -1,0 +1,140 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Frequência</h1>
+	
+	<h:form id="formFaltas">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgFaltas" closable="true"/>
+		</div>
+		
+		<p:fieldset id="fieldFaltas" legend="Registrar Frequência" style="font-size: 12px; margin-top: 10px;">
+		
+			<h:panelGrid id="painel" columns="2">
+			
+				<h:outputLabel for="cbAno" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="cbAno" value="#{faltaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodo"  
+	                        listener="#{faltaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbTurma"  
+	                        listener="#{faltaBean.trocarTurmaProfessor}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbPeriodo" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodo" value="#{faltaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbTurma" value="#{faltaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.turmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			        <p:ajax update="cbDisciplina"  
+	                        listener="#{faltaBean.trocarDisciplina}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbDisciplina" value="Selecione a disciplina: *"/>
+				<p:selectOneMenu id="cbDisciplina" value="#{faltaBean.idDisciplinaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+			        <p:ajax update="cbAula"  
+	                        listener="#{faltaBean.trocarAula}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbAula" value="Selecione a aula: *"/>
+				<p:selectOneMenu id="cbAula" value="#{faltaBean.idAulaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{faltaBean.aulas}" var="aula" 
+			        itemLabel="#{aula.diaSemana.descricao} / #{aula.horaInicio} - #{aula.horaFim}" 
+			        itemValue="#{aula.idAula}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="data" value="Selecione a data: *"/>
+				<p:calendar id="data" value="#{faltaBean.data}" locale="pt_BR"
+										 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014" required="true" requiredMessage="Escolha uma data fim!" size="10" maxlength="10"/>
+			    
+			    <p:commandButton value="Buscar" action="#{faltaBean.buscarAlunos}" icon="ui-icon-search" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formFaltas:tabelaComFalta :formFaltas:tabelaSemFalta :dialog"/>
+			    
+			
+			</h:panelGrid>
+			
+			<h4 style="color: red; font-size: 11px;">Campos marcados com * são obrigatórios</h4>
+		
+		</p:fieldset>
+		
+		
+		<p:fieldset legend="Alunos Sem Falta" style="font-size: 12px; margin: 10px 0 10px 0;">
+		
+			<p:dataTable id="tabelaSemFalta" var="aluno" value="#{faltaBean.alunoDataModel}"
+                 emptyMessage="Nenhum aluno encontrado"
+                 selection="#{faltaBean.alunoList}"
+                 rowKey="#{aluno.idPessoa}"
+                 rowIndexVar="a"
+                 style="font-size: 12px; text-align: center; margin-bottom: 5px;">
+                 
+                <f:facet name="header">Lista de Alunos Sem Faltas</f:facet>
+				
+				<p:column selectionMode="multiple" style="width:2%" />
+				
+				<p:column headerText="Número">
+					#{a + 1}
+				</p:column>
+				
+				<p:column headerText="Nome">
+					#{aluno.nome}
+				</p:column>
+				
+				<p:column headerText="Qtde de Faltas">
+					#{faltaBean.quantidadeFaltas(aluno.idPessoa)}
+				</p:column>
+            
+            </p:dataTable>
+            
+            <p:commandButton value="Salvar" action="#{faltaBean.salvarFrequencia}" icon="ui-icon-check" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formFaltas:msgFaltas :formFaltas:tabelaComFalta :formFaltas:tabelaSemFalta :dialog"/>
+		
+		</p:fieldset>
+		
+
+		<p:fieldset legend="Alunos Com Falta" style="font-size: 12px; margin: 10px 0 10px 0;">
+		
+			<p:dataTable id="tabelaComFalta" var="falta" value="#{faltaBean.faltaList}"
+                 emptyMessage="Nenhum aluno encontrado"
+                 style="font-size: 12px; text-align: center; margin-bottom: 5px;">
+                 
+                <f:facet name="header">Lista de Alunos Com Faltas</f:facet>
+				
+				<p:column headerText="Nome">
+					#{falta.alunoTurma.aluno.nome}
+				</p:column>
+				
+				<p:column headerText="Retirar Falta">
+					<p:commandLink action="#{faltaBean.excluir}" update=":formFaltas:msgFaltas :formFaltas:tabelaComFalta :formFaltas:tabelaSemFalta">
+						<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+						<f:setPropertyActionListener target="#{faltaBean.falta}" value="#{falta}"/>
+						<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+            
+            </p:dataTable>
+		
+		</p:fieldset>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+	
+	</h:form>
+	
+</ui:define>
+</ui:composition>

@@ -1,0 +1,56 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Turmas</h1>
+	
+	<h:form id="formCadastrarTurma">
+		<div style="font-size: 12px; width:400px;">
+			<p:messages id="msgTurma" closable="true"/>
+		</div>
+		<h:inputHidden value="#{turmaBean.turma.idTurma}"/>
+		
+		<p:fieldset legend="Nova Turma" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+		
+				<h:outputLabel for="descTurma" value="Descrição: *"/>
+				<p:inputText id="descTurma" value="#{turmaBean.turma.descricao}" maxlength="30" required="true" requiredMessage="Preencha o campo descrição!"/>
+		
+				<h:outputLabel for="salaTurma" value="Sala: *"/>
+				<p:inputText id="salaTurma" value="#{turmaBean.turma.sala}" maxlength="10" required="true" requiredMessage="Preencha o campo sala!"/>
+				
+				<h:outputLabel for="turnoTurma" value="Turno: *"/>
+				<p:selectOneMenu id="turnoTurma" value="#{turmaBean.idTurno}" required="true" requiredMessage="Selecione um turno!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{turmaBean.buscarTurno}" var="turno" itemLabel="#{turno.descricao}" itemValue="#{turno.idTurno}" />
+		        </p:selectOneMenu>
+				
+				<h:outputLabel for="anoTurma" value="Ano: *"/>
+				<p:selectOneMenu id="anoTurma" value="#{turmaBean.idAno}" required="true" requiredMessage="Selecione um ano!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{turmaBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="serieTurma" value="Serie: *"/>
+		        <p:selectOneMenu id="serieTurma" value="#{turmaBean.idSerie}" required="true" requiredMessage="Selecione uma serie!">
+		        	<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		        	<f:selectItems value="#{turmaBean.buscarSerie}" var="serie" itemLabel="#{serie.descricao}" itemValue="#{serie.idSerie}"/>
+		        </p:selectOneMenu>
+		
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{turmaBean.salvar}" style="font-size:12px; margin: 0 5px 0 0" update=":formCadastrarTurma:msgTurma"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{turmaBean.cancelar}" immediate="true" style="font-size:12px;"/> 
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

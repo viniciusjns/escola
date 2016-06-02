@@ -1,0 +1,73 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Adicionar Disciplina</h1>
+
+	<h:form id="formAddDisciplinaProfessor">
+		<div style="font-size: 12px;">
+			<p:growl id="msgAddDisc"/>
+		</div>
+	
+		<h:inputHidden value="#{professorDisciplinaBean.professor.idPessoa}"/>
+		
+		<p:fieldset legend="Adicionar Disciplina" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Nome do Professor: "/>
+				<h:outputLabel value="#{professorDisciplinaBean.professor.nome}"/>
+			
+				<h:outputLabel for="descDisc" value="Selecione a disciplina: "/>
+				<p:selectOneMenu id="descDisc" value="#{professorDisciplinaBean.idDisciplinaSelecionada}" required="true" requiredMessage="Selecione uma disciplina!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{disciplinaBean.buscarTodos}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+		        </p:selectOneMenu>
+		        
+		        <p:commandButton value="Salvar" icon="ui-icon-check" action="#{professorDisciplinaBean.salvar}" 
+		        update=":formAddDisciplinaProfessor :formAddDisciplinaProfessor:msgAddDisc :formListarDisciplinaProfessor:painel"/>
+			
+			</h:panelGrid>
+		</p:fieldset>
+	</h:form>
+		
+		<br/>
+		
+	<h:form id="formListarDisciplinaProfessor">		
+		
+		<p:fieldset id="painel" legend="Disciplinas do professor #{professorDisciplinaBean.professor.nome}" style="font-size: 12px; width: 400px;">
+		
+			<p:dataTable id="tabela" value="#{professorDisciplinaBean.listarDisciplinas}" var="pd" style="text-align: center;" emptyMessage="Nenhuma disciplina encontrada">
+			
+				<p:column headerText="Código">
+					#{pd.idProfessorDisciplina}
+				</p:column>
+				
+				<p:column headerText="Disciplina">
+					#{pd.disciplina.descricao}
+				</p:column>
+				
+				<p:column headerText="Excluir">
+					<p:commandLink action="#{professorDisciplinaBean.excluir}" update=":formListarDisciplinaProfessor:painel :formAddDisciplinaProfessor:msgAddDisc">
+						<h:graphicImage library="imagens" name="excluir.png"/>
+						<f:setPropertyActionListener target="#{professorDisciplinaBean.pd}" value="#{pd}"/>
+						<p:confirm header="Exclusão" message="Deseja excluir dados?" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			
+			</p:dataTable>
+			
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+		        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+		        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+		    </p:confirmDialog>
+		
+		</p:fieldset>
+	
+	</h:form>
+	
+</ui:define>
+</ui:composition>

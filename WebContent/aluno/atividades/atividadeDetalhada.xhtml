@@ -1,0 +1,115 @@
+<ui:composition template="/aluno/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<style type="text/css">
+	.teste{
+		color: #0F80B3;
+		font-size:16px;
+		/*border: 1px solid #000;*/
+	}
+</style>
+
+	<h1 id="titulo">Informações da Atividade</h1>
+
+	<h:form id="formInfoAtividade" enctype="multipart/form-data">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgEntrega" closable="true" />
+		</div>
+	 
+	    <h:inputHidden value="#{atividadeComEntregaBean.atividadeSelecionada.idAtividade}"/>
+	    
+		    <p:fieldset legend="Informações" style="font-size: 12px;">
+					
+					<h:inputText style="width: 0px; height: 0px; border: 0; float: right;"/>
+					
+					<h:outputLabel value="Título: " styleClass="teste" /><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.titulo}"/><br/><br/>
+					
+					<h:outputLabel value="Disciplina: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.professorTurma.professorDisciplina.disciplina.descricao}"/><br/><br/>
+					
+					<h:outputLabel value="Valor: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.valor}"/><br/><br/>
+					
+					<h:outputLabel value="Data Início: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.dataInicio}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+					<br/><br/>
+					
+					<h:outputLabel value="Data Fim: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.dataFim}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputLabel>
+					<br/><br/>
+					
+					<h:outputLabel value="Hora Início: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.horaInicio}"/><br/><br/>
+					
+					<h:outputLabel value="Hora Fim: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.horaFim}"/><br/><br/>
+					
+					<h:outputLabel value="Período Letivo: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.periodoLetivo.descricao}"/><br/><br/>
+					
+					<h:outputLabel value="Descrição: " styleClass="teste"/><br/>
+					<h:outputLabel value="#{atividadeComEntregaBean.atividadeSelecionada.descricao}"/><br/><br/>
+					
+					<h:outputLabel value="Arquivo: " styleClass="teste"/><br/>
+					<p:commandLink id="downloadLinkAtividade" value="#{atividadeComEntregaBean.atividadeSelecionada.caminhoArquivo}" ajax="false" 
+                    	onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px">
+                    	
+					    <p:fileDownload value="#{atividadeComEntregaBean.scFile}" />
+					</p:commandLink>
+				
+			</p:fieldset>
+		
+			<br/>
+			
+			<p:fieldset legend="Entrega" id="pnl" style="margin-bottom: 10px; font-size: 12px;">
+		    
+		    	
+		    		
+		    		<h:inputHidden value="#{entregaBean.entrega.idEntrega}"/>
+		    		
+		    		<h:panelGrid columns="2" id="pnlEntrega">
+		    		
+			    		<h:outputLabel value="Efetuou entrega: " styleClass="teste"/>
+			    		<h:outputLabel value="#{entregaBean.entrega.idEntrega != 0 ? 'Sim' : 'Não'}" style="color: #{entregaBean.entrega.idEntrega != 0 ? 'green' : 'red'};"/>
+			    		
+			    		<h:outputLabel value="Arquivo em anexo: " styleClass="teste" rendered="#{entregaBean.entrega.idEntrega != 0}"/>
+			    		<p:commandLink id="downloadLinkEntrega" value="#{entregaBean.entrega.arquivo}" ajax="false" 
+	                   		onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px" rendered="#{entregaBean.entrega.idEntrega != 0}">
+					    	<p:fileDownload value="#{entregaBean.scFile}" />
+						</p:commandLink>
+			    		
+			    		<h:outputLabel value="Descrição: " styleClass="teste" style="float:left;"/>
+			    		<p:inputTextarea value="#{entregaBean.entrega.descricao}" rows="5" cols="50" rendered="#{atividadeComEntregaBean.atividadeSelecionada.emAndamento}"/>
+			    		<p:outputLabel value="#{entregaBean.entrega.descricao}" rendered="#{!atividadeComEntregaBean.atividadeSelecionada.emAndamento}"/>
+			    		
+			    		<h:outputLabel value="Arquivo: " styleClass="teste" rendered="#{atividadeComEntregaBean.atividadeSelecionada.emAndamento}"/>
+						<p:fileUpload value="#{entregaBean.uploadedFile}" mode="simple" rendered="#{atividadeComEntregaBean.atividadeSelecionada.emAndamento}"/>
+						
+					</h:panelGrid>
+					
+					<p:commandButton id="saveBtn" value="Salvar" icon="ui-icon-check" action="#{entregaBean.salvar}" ajax="false" 
+					onclick="PrimeFaces.monitorDownload(start, stop)" 
+					rendered="#{atividadeComEntregaBean.atividadeSelecionada.emAndamento and atividadeComEntregaBean.podeEntregar}" 
+					update=":formInfoAtividade:msgEntrega :dialog" style="font-size: 12px;"/>
+		    	
+		    	
+		    
+		    </p:fieldset>
+	    
+	</h:form>
+	
+
+</ui:define>
+</ui:composition>

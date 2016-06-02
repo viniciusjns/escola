@@ -1,0 +1,74 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Ver Entregas</h1>
+	
+	<h:form id="formVerEntregas">
+	
+	<p:fieldset legend="Entregas">
+		
+		<p:dataTable value="#{entregaBean.entregas}" var="entrega"
+			emptyMessage="Nenhuma entrega encontrada"
+			paginator="true" rows="10" 
+			paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	        rowsPerPageTemplate="10,25,50,100"
+			style="font-size: 12px; text-align: center;">
+			
+			<f:facet name="header">Entregas da Atividade #{entregaBean.atividadeSelecionada.titulo}</f:facet>
+			
+			<f:facet name="footer">Total de Entregas: #{entregaBean.buscarQtdeEntregas()}</f:facet>
+		
+			<p:column headerText="Código">
+				#{entrega.idEntrega}
+			</p:column>
+			
+			<p:column headerText="Aluno">
+				#{entrega.aluno.nome}
+			</p:column>
+			
+			<p:column headerText="Descrição">
+				#{entrega.descricao}
+			</p:column>
+			
+			<p:column headerText="Data/Hora da Entrega">
+				<h:outputLabel value="#{entrega.dataEntrega}">
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+				</h:outputLabel>
+				<h:outputLabel value="#{entrega.horaEntrega}"/>
+			</p:column>
+			
+			<p:column headerText="Arquivo">
+				#{entrega.arquivo}
+			</p:column>
+			
+			<p:column headerText="Baixar Arquivo">
+				<p:commandLink id="downloadLinkEntrega" ajax="false" title="#{entrega.arquivo}" 
+                  	onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px" rendered="#{entrega.arquivo != null}">
+                  	<h:graphicImage library="imagens" name="download.png"/>
+                  	<f:setPropertyActionListener target="#{entregaBean.entregaSelecionada}" value="#{entrega}"/>
+			    	<p:fileDownload value="#{entregaBean.scFile2}"/>
+				</p:commandLink>
+			</p:column>
+		
+		
+		</p:dataTable>
+		
+		<p:commandButton value="Baixar todos" icon="ui-icon-arrowthickstop-1-s"
+			onclick="PrimeFaces.monitorDownload(start, stop)" 
+			style="font-size: 12px; margin: 5px 0 0 0;"
+			ajax="false">
+			<p:fileDownload value="#{entregaBean.scFile3}"/>
+		</p:commandButton>	
+		
+	</p:fieldset>
+	
+	</h:form>
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,72 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+	<h1 id="titulo">Gerenciar Horários</h1>
+	
+	<h:form id="formNovoHorario">
+		<p:commandButton value="Novo Horário" action="#{horarioBean.novoHorario}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size:12px;"/>
+	</h:form>
+	
+	<h:form id="formListarHorarios">
+		<div style="font-size: 12px;">
+			<p:growl id="msgHorario"/>
+		</div>
+		<p:dataTable id="dataTable" var="horario" value="#{horarioBean.buscarTodos}"  
+                 paginator="true" rows="5"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15"
+                 emptyMessage="Nenhum horário encontrado"
+                 filteredValue="#{horarioBean.filteredHorario}"
+                 style="font-size: 12px; text-align: center;">
+                 
+			<f:facet name="header">Horários Cadastrados</f:facet>
+			
+			<p:column headerText="Código">
+				#{horario.idHorario}
+			</p:column>
+			
+			<p:column headerText="Descrição" filterBy="descricao" filterMatchMode="contains">
+				#{horario.descricao}
+			</p:column>
+			
+			<p:column headerText="Turno" filterBy="turno.descricao" filterMatchMode="contains">
+				#{horario.turno.descricao}
+			</p:column>
+			
+			<p:column headerText="Hora Inicio/Fim">
+				#{horario.horaInicio} / #{horario.horaFim}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Editar</f:facet>
+				<h:commandLink action="#{horarioBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{horarioBean.horario}" value="#{horario}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Excluir</f:facet>
+				<p:commandLink action="#{horarioBean.excluir}" update=":formListarHorarios:dataTable, :formListarHorarios:msgHorario">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{horarioBean.horario}" value="#{horario}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

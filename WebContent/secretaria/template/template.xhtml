@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Sistema de Controle Acadêmico</title>
+	<h:outputStylesheet library="css" name="estilo.css"/>
+</h:head>
+<h:body>
+<div id="principal">
+	<div id="topo">
+		<h:link outcome="/secretaria/index.jsf" >
+			<h:graphicImage library="imagens" name="logo.jpg" style="border:0; margin: 10px 0 0 10px;"/>
+		</h:link>
+		
+		<div id="infoTopo">
+			<h:outputLabel value="Bem vindo(a) #{contextoBean.secretariaLogada.nome}"/>
+			<h:form id="form">
+			
+			<div id="infoTopoTxt">
+				<p:commandLink styleClass="trocarSenha" action="#{senhaBean.buscarUsuario}" value="Trocar senha" oncomplete="senhaDialog.show();" update=":form:senhaDialog"/> |
+				<a id="sair" onclick="document.location='#{request.contextPath}/j_spring_security_logout'" title="Sair">
+					Sair
+				</a>
+			</div>
+				
+				<ui:include src="/trocarSenhaDialog.xhtml"></ui:include>
+				
+			</h:form>
+		</div>
+		
+	</div>
+	
+	<div id="menu">
+		<h:form id="formMenuSecretaria">
+		
+			<h1 id="menutitulo">Área da Secretaria</h1>
+		<!-- 
+			<p:commandButton style="font-size: 12px;" value="Gerenciar Alunos" action="/secretaria/alunos/gerenciarAlunos.jsf?faces-redirect=true"/><br/>
+			<p:commandButton style="font-size: 12px;" value="Gerenciar Professores" action="/secretaria/professores/gerenciarProfessores.jsf?faces-redirect=true"/><br/>
+			<p:commandButton style="font-size: 12px;" value="Gerenciar Disciplinas" action="/secretaria/disciplinas/gerenciarDisciplinas.jsf?faces-redirect=true"/><br/>
+			<p:commandButton style="font-size: 12px;" value="Gerenciar Turmas" action="/secretaria/turmas/gerenciarTurmas.jsf?faces-redirect=true"/><br/>
+			<p:commandButton style="font-size: 12px;" value="Gerenciar Períodos Letivos" action="/secretaria/periodosLetivos/gerenciarPeriodosLetivos.jsf?faces-redirect=true"/><br/>
+		-->
+			 
+			<div id="menuprincipal">
+				<ul>
+					<li><h:link value="Gerenciar Alunos" outcome="/secretaria/alunos/gerenciarAlunos.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Professores" outcome="/secretaria/professores/gerenciarProfessores.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Disciplinas" outcome="/secretaria/disciplinas/gerenciarDisciplinas.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Turmas" outcome="/secretaria/turmas/gerenciarTurmas.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Períodos Letivos" outcome="/secretaria/periodosLetivos/gerenciarPeriodosLetivos.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Aulas" outcome="/secretaria/aulas/gerenciarAulas.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerar Boletim" outcome="/secretaria/boletim/gerarBoletim.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+				</ul>
+			</div>
+			
+		</h:form>
+		
+		<ui:include src="/resources/loader/loader.xhtml"/>
+		
+	</div>
+	
+	<div id="conteudo">
+		<ui:insert name="conteudo">
+			
+		</ui:insert>
+	</div>
+		
+	<div id="rodape">
+		
+		<h5 style="text-align: center; color: #0F80B3;">Sistema Desenvolvido como Trabalho de Conclusão de Curso do Aluno Vinicius Silva do Curso de Sistemas de Informação 2014</h5>
+		
+	</div>
+</div>
+
+</h:body>
+</html>

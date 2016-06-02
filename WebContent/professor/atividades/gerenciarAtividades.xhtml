@@ -1,0 +1,164 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Atividades</h1>
+	
+	<h:form id="formNovaAtividade">
+		<p:commandButton value="Nova Atividade Com Entrega" action="#{atividadeComEntregaBean.novaAtividade}" style="font-size: 12px; margin: 0 5px 0 0"/>
+		<p:commandButton value="Nova Atividade Sem Entrega" action="#{atividadeSemEntregaBean.novaAtividade}" style="font-size: 12px;"/>
+	</h:form>
+	
+	<h:form id="formListarAtividades">
+		<div style="font-size: 12px;">
+			<p:growl id="msgAtividade"/>
+		</div>
+	
+		<p:tabView id="tabView" style="font-size: 12px; margin-top: 10px;">
+		
+			<p:tab id="tab1" title="Com Entrega">
+			
+				<p:dataTable id="tabelaComEntrega" var="atividade" value="#{atividadeComEntregaBean.buscarTodos}"
+					paginator="true" rows="10"  
+	                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                rowsPerPageTemplate="10,25,50,100"
+	                emptyMessage="Nenhuma atividade encontrada"
+	                filteredValue="#{atividadeComEntregaBean.filteredAtividade}"
+					style="font-size: 12px; text-align: center;">
+					
+					<f:facet name="header">Atividades Com Entrega</f:facet>
+					
+					<p:column headerText="Título" sortBy="#{atividade.titulo}">
+						#{atividade.titulo}
+					</p:column>
+					
+					<p:column headerText="Valor">
+						#{atividade.valor}
+					</p:column>
+					
+					<p:column headerText="Data/Hora Fim">
+						<h:outputLabel value="#{atividade.dataFim}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+						<br/>
+						<h:outputLabel value="#{atividade.horaFim}"/>
+					</p:column>
+					
+					<p:column headerText="Ano" sortBy="#{atividade.professorTurma.turma.ano.descricao}">
+						#{atividade.professorTurma.turma.ano.descricao}
+					</p:column>
+					
+					<p:column headerText="Turma" sortBy="#{atividade.professorTurma.turma.descricao}">
+						#{atividade.professorTurma.turma.descricao}
+					</p:column>
+					
+					<p:column headerText="Disciplina" sortBy="#{atividade.professorTurma.professorDisciplina.disciplina.descricao}">
+						#{atividade.professorTurma.professorDisciplina.disciplina.descricao}
+					</p:column>
+					
+					
+					
+					<p:column headerText="Ver Entregas" width="50">
+						<h:commandLink action="#{entregaBean.verEntregas}" onclick="PrimeFaces.monitorDownload(start, stop)">
+							<f:setPropertyActionListener target="#{entregaBean.atividadeSelecionada}" value="#{atividade}"/>
+							<h:graphicImage library="imagens" name="buscar.png"/>
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Editar">
+						<h:commandLink action="#{atividadeComEntregaBean.editar}">
+							<f:setPropertyActionListener target="#{atividadeComEntregaBean.atividadeComEntrega}" value="#{atividade}"/>
+							<h:graphicImage library="imagens" name="editar.png"/>
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Excluir">
+						<p:commandLink action="#{atividadeComEntregaBean.excluir}" update=":formListarAtividades :formListarAtividades:msgAtividade">
+							<f:setPropertyActionListener target="#{atividadeComEntregaBean.atividadeComEntrega}" value="#{atividade}"/>
+							<h:graphicImage library="imagens" name="excluir.png"/>
+							<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+				
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+			        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+			        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+			    </p:confirmDialog>
+			
+			</p:tab>
+			
+			<p:tab id="tab2" title="Sem Entrega">
+			
+				<p:dataTable id="tabelaSemEntrega" var="atividade" value="#{atividadeSemEntregaBean.buscarTodos}"
+					paginator="true" rows="10"  
+	                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                rowsPerPageTemplate="10,50,100"
+	                emptyMessage="Nenhuma atividade encontrada"
+	                filteredValue="#{atividadeSemEntregaBean.filteredAtividade}"
+					style="font-size: 12px; text-align: center;">
+					
+					<f:facet name="header">Atividades Sem Entrega</f:facet>
+					
+					<p:column headerText="Título" sortBy="#{atividade.titulo}">
+						#{atividade.titulo}
+					</p:column>
+					
+					<p:column headerText="Valor">
+						#{atividade.valor}
+					</p:column>
+					
+					<p:column headerText="Data">
+						<h:outputLabel value="#{atividade.dataFim}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Turma" sortBy="#{atividade.professorTurma.turma.descricao}">
+						#{atividade.professorTurma.turma.descricao}
+					</p:column>
+					
+					<p:column headerText="Disciplina" sortBy="#{atividade.professorTurma.professorDisciplina.disciplina.descricao}">
+						#{atividade.professorTurma.professorDisciplina.disciplina.descricao}
+					</p:column>
+					
+					<p:column headerText="Editar">
+						<h:commandLink action="#{atividadeSemEntregaBean.editar}">
+							<f:setPropertyActionListener target="#{atividadeSemEntregaBean.atividadeSemEntrega}" value="#{atividade}"/>
+							<h:graphicImage library="imagens" name="editar.png"/>
+						</h:commandLink>
+					</p:column>
+					
+					<p:column headerText="Excluir">
+						<p:commandLink action="#{atividadeSemEntregaBean.excluir}" update=":formListarAtividades :formListarAtividades:msgAtividade">
+							<f:setPropertyActionListener target="#{atividadeSemEntregaBean.atividadeSemEntrega}" value="#{atividade}"/>
+							<h:graphicImage library="imagens" name="excluir.png"/>
+							<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+				
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+			        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+			        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+			    </p:confirmDialog>
+			
+			</p:tab>
+		
+		</p:tabView>
+		
+		
+	
+	</h:form>
+	
+	
+
+</ui:define>
+</ui:composition>

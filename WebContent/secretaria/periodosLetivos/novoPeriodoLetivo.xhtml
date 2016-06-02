@@ -1,0 +1,52 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Períodos Letivos</h1>
+	
+	<h:form id="formCadastrarPeriodoLetivo">
+		<div style="font-size: 12px; width:400px;">
+			<p:messages id="msgPeriodoLetivo" closable="true"/>
+		</div>
+		<h:inputHidden value="#{periodoLetivoBean.periodoLetivo.idPeriodoLetivo}"/>
+		
+				<p:fieldset legend="Novo Periodo Letivo" style="font-size:12px; width:400px;">
+					<h:panelGrid columns="2">
+				
+				<h:outputLabel for="descPeriodoLetivo" value="Descrição: *"/>
+				<p:inputText id="descPeriodoLetivo" value="#{periodoLetivoBean.periodoLetivo.descricao}" maxlength="30" required="true" requiredMessage="Preencha o campo descrição!"/>
+				
+				<h:outputLabel value="Data Inicio: *" for="dataInicio"/>
+				<p:calendar value="#{periodoLetivoBean.periodoLetivo.dataInicio}" id="dataInicio" locale="pt_BR"
+						navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014"
+						required="true" requiredMessage="Preencha a data de inicio do periodo letivo!" size="10"/>
+				
+				<h:outputLabel value="Data Fim: *" for="dataFim"/>
+				<p:calendar value="#{periodoLetivoBean.periodoLetivo.dataFim}" id="dataFim" locale="pt_BR"
+						navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014"
+						required="true" requiredMessage="Preencha a data de termino do periodo letivo!" size="10"/>
+				
+				<h:outputLabel for="anoPeriodoLetivo" value="Ano: *"/>
+				<p:selectOneMenu id="anoPeriodoLetivo" value="#{periodoLetivoBean.idAno}" required="true" requiredMessage="Selecione um ano!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+		        </p:selectOneMenu>
+		
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+			
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{periodoLetivoBean.salvar}" style="font-size:12px; margin: 0 5px 0 0" update=":formCadastrarPeriodoLetivo:msgPeriodoLetivo"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{periodoLetivoBean.cancelar}" immediate="true" style="font-size:12px;"/>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

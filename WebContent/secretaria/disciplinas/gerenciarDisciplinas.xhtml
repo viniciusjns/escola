@@ -1,0 +1,63 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+	<h1 id="titulo">Gerenciar Disciplinas</h1>
+	
+	<h:form id="formNovaDisciplina">
+		<p:commandButton value="Nova Disciplina" action="#{disciplinaBean.novaDisciplina}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size:12px; margin: 0 0 5px 0"/>
+	</h:form>
+	
+	<h:form id="formListarDisciplinas">
+		<div style="font-size: 12px;">
+			<p:growl id="msgDisciplina"/>
+		</div>
+		<p:dataTable id="dataTable" var="disciplina" value="#{disciplinaBean.buscarTodos}"  
+                 paginator="true" rows="10"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="10,25,50,100"
+                 emptyMessage="Nenhuma disciplina encontrada"
+                 filteredValue="#{disciplinaBean.filteredDisciplina}"
+                 style="font-size: 12px; text-align: center;">
+			<f:facet name="header">Disciplinas Cadastradas</f:facet>
+			
+			<p:column headerText="Código">
+				#{disciplina.idDisciplina}
+			</p:column>
+			
+			<p:column headerText="Descrição" filterBy="descricao" filterMatchMode="contains">
+				#{disciplina.descricao}
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Editar</f:facet>
+				<h:commandLink action="#{disciplinaBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{disciplinaBean.disciplina}" value="#{disciplina}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">Excluir</f:facet>
+				<p:commandLink action="#{disciplinaBean.excluir}" update=":formListarDisciplinas:dataTable, :formListarDisciplinas:msgDisciplina">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{disciplinaBean.disciplina}" value="#{disciplina}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

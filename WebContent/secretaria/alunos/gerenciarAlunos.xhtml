@@ -1,0 +1,93 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Alunos</h1>
+	
+	<h:form id="formNovoAluno">
+		<p:commandButton id="btnNovoAluno" value="Novo Aluno" action="#{alunoBean.novoAluno}" onclick="PrimeFaces.monitorDownload(start, stop)" style="font-size: 12px; margin: 0 0 5px 0"/>
+	</h:form>
+	
+	<h:form id="formListarAlunos">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgAluno"/>
+		</div>
+		
+		<p:dataTable id="dataTable" var="aluno" value="#{alunoBean.buscarTodos}"  
+                 paginator="true" rows="10"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="10,25,50,100"
+                 emptyMessage="Nenhum aluno encontrado"
+                 filteredValue="#{alunoBean.filteredAluno}"
+                 style="font-size: 12px; text-align: center;">
+			<f:facet name="header">Alunos Cadastrados</f:facet>
+			
+			<p:column headerText="Código">
+				#{aluno.idPessoa}
+			</p:column>
+			
+			<p:column headerText="Nome" filterBy="nome" filterMatchMode="contains">
+				#{aluno.nome}
+			</p:column>
+						
+			<p:column headerText="CPF" filterBy="cpf" filterMatchMode="contains">
+				#{aluno.cpf}
+			</p:column>	
+			
+			<p:column headerText="Data de Nascimento">
+				<p:outputLabel value="#{aluno.dataNascimento}">
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+				</p:outputLabel>
+				
+			</p:column>
+			
+			<!-- <p:column>
+				<f:facet name="header">Telefones</f:facet>
+				<ui:repeat var="telefone" value="#{aluno.telefones}">
+					#{telefone.numero} <br/>
+				</ui:repeat>
+			</p:column> -->
+			<p:column headerText="Consultar">
+				<p:commandLink oncomplete="consultarDialog.show();" update=":formListarAlunos:modalDialog">
+					<h:graphicImage library="imagens" name="buscar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{alunoBean.aluno}" value="#{aluno}"/>
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Editar">
+				<h:commandLink action="#{alunoBean.editar}">
+					<h:graphicImage library="imagens" name="editar.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{alunoBean.aluno}" value="#{aluno}"/>
+					<f:setPropertyActionListener target="#{alunoBean.endereco}" value="#{aluno.endereco}"/>
+					<f:setPropertyActionListener target="#{alunoBean.telefone1}" value="#{aluno.telefones[0]}"/>
+					<f:setPropertyActionListener target="#{alunoBean.telefone2}" value="#{aluno.telefones[1]}"/>
+				</h:commandLink>
+			</p:column>
+			
+			<p:column headerText="Excluir">
+				<p:commandLink action="#{alunoBean.excluir}" update=":formListarAlunos:dataTable, :formListarAlunos:msgAluno">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{alunoBean.aluno}" value="#{aluno}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+	    
+	    <ui:include src="/secretaria/alunos/infoAlunoDialog.xhtml"></ui:include>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

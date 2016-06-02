@@ -1,0 +1,113 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Professores</h1>
+	
+	<h:form id="formCadastrarProfessor">
+	
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msg" closable="true"/>
+		</div>
+		
+		<h:inputHidden value="#{professorBean.professor.idPessoa}"/>
+		<h:inputHidden value="#{professorBean.endereco.idEndereco}"/>
+		<h:inputHidden value="#{professorBean.telefone1.idTelefone}"/>
+		<h:inputHidden value="#{professorBean.telefone2.idTelefone}"/>
+		
+		<!-- <div style="float:left; display: block; border: 1px solid #fff; width: 865px; height: 350px;"> -->
+		
+		<!-- <div style="border: 1px solid #fff; float: left;"> -->
+		<p:fieldset legend="Informações Pessoais" style="font-size:12px; width:400px;">
+			<h:panelGrid columns="2">
+				
+				<h:outputLabel for="nomeProfessor" value="Nome Completo: *"/>
+				<p:inputText id="nomeProfessor" value="#{professorBean.professor.nome}" required="true" requiredMessage="Preencha o nome do professor!" size="30" maxlength="80"/>
+				
+				<h:outputLabel for="dtNascProfessor" value="Data Nascimento: *"/>
+				<p:calendar value="#{professorBean.professor.dataNascimento}" id="dtNascProfessor" locale="pt_BR"
+									 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2014" mindate="01/01/1990" required="true" requiredMessage="Preencha a data de nascimento!" size="10" maxlength="10"/>
+				
+				<h:outputLabel for="sexoProfessor" value="Sexo: *"/>
+				<p:selectOneMenu id="sexoProfessor" value="#{professorBean.idSexo}" required="true" requiredMessage="Selecione um sexo!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{professorBean.buscarSexo}" var="sexo" itemLabel="#{sexo.descricao}" itemValue="#{sexo.idSexo}" />
+		        </p:selectOneMenu>
+				
+				<h:outputLabel for="cpfProfessor" value="CPF: *"/>
+				<p:inputMask mask="999.999.999-99" id="cpfProfessor" value="#{professorBean.professor.cpf}" required="true" requiredMessage="Preencha o CPF!" size="15" maxlength="11"/>
+				
+				<h:outputLabel for="emailProfessor" value="E-mail: *"/>
+				<p:inputText id="emailProfessor" value="#{professorBean.professor.email}" required="true" requiredMessage="Preencha o e-mail!" size="30" maxlength="80"/>
+				
+				<h:outputLabel for="telProfessor" value="Telefone: *"/>
+				<p:inputMask mask="(99)9999-9999" id="telProfessor" value="#{professorBean.telefone1.numero}" required="true" requiredMessage="Preencha o telefone!" size="15" maxlength="13"/>
+				
+				<h:outputLabel for="celProfessor" value="Celular: *"/>
+				<p:inputMask mask="(99)9999-9999" id="celProfessor" value="#{professorBean.telefone2.numero}" required="true" requiredMessage="Preencha o celular" size="15" maxlength="13"/>
+				
+				<h:outputLabel for="salProfessor" value="Salário: "/>
+				<p:inputText id="salProfessor" value="#{professorBean.professor.salario}" size="10" maxlength="8"/>
+				
+				<h:outputLabel for="gradProfessor" value="Graduação: *"/>
+				<p:selectOneMenu id="gradProfessor" value="#{professorBean.idGraduacao}" required="true" requiredMessage="Selecione uma graduação!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{professorBean.buscarGraduacao}" var="grad" itemLabel="#{grad.descricao}" itemValue="#{grad.idGraduacao}" />
+		        </p:selectOneMenu>
+				
+				<h:outputLabel for="obsProfessor" value="Observação: "/>
+				<p:inputTextarea id="obsProfessor" value="#{professorBean.professor.observacao}" rows="5" cols="30"/>
+			
+			</h:panelGrid>
+		</p:fieldset>
+		<!-- </div> -->
+		
+		<!-- <div style="border: 1px solid #fff; float: left;"> -->
+		<p:fieldset legend="Endereço" style="font-size:12px; width:400px; height: 240px; margin: 10px 0 10px 0">
+			<h:panelGrid columns="2">
+				
+				<h:outputLabel for="logradouroProfessor" value="Logradouro: *"/>
+				<p:inputText id="logradouroProfessor" value="#{professorBean.endereco.logradouro}" required="true" requiredMessage="Preencha o campo logradouro!" size="30" maxlength="80"/>
+				
+				<h:outputLabel for="numeroLogradouroProfessor" value="Número: *"/>
+				<p:inputText id="numeroLogradouroProfessor" value="#{professorBean.endereco.numero}" required="true" requiredMessage="Preencha o campo número!" size="8" maxlength="6"/>
+				
+				<h:outputLabel for="bairroProfessor" value="Bairro: *"/>
+				<p:inputText id="bairroProfessor" value="#{professorBean.endereco.bairro}" required="true" requiredMessage="Preencha o campo bairro!" size="20" maxlength="50"/>
+				
+				<h:outputLabel for="cidadeProfessor" value="Cidade: *"/>
+				<p:inputText id="cidadeProfessor" value="#{professorBean.endereco.cidade}" required="true" requiredMessage="Preencha o campo cidade!" size="20" maxlength="50"/>
+				
+				<h:outputLabel for="cepProfessor" value="CEP: *"/>
+				<p:inputMask mask="99999-999" id="cepProfessor" value="#{professorBean.endereco.cep}" required="true" requiredMessage="Preencha o campo CEP!" size="10" maxlength="8"/>
+				
+				<h:outputLabel for="ufProfessor" value="UF: *"/>
+				<p:selectOneMenu id="ufProfessor" value="#{professorBean.idUf}" required="true" requiredMessage="Selecione um UF!">
+					<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+		            <f:selectItems value="#{enderecoBean.buscarUf}" var="uf" itemLabel="#{uf.descricao}" itemValue="#{uf.idUf}" />
+		        </p:selectOneMenu>
+		        
+		        <h:outputLabel for="complementoProfessor" value="Complemento: "/>
+				<p:inputText id="complementoProfessor" value="#{professorBean.endereco.complemento}" size="20" maxlength="50"/>
+				
+			</h:panelGrid>
+		</p:fieldset>
+		<!-- </div> -->
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton value="Salvar" icon="ui-icon-check" action="#{professorBean.salvar}" update=":formCadastrarProfessor:msg :dialog" style="float:left; display: block; font-size: 12px; margin: 0 5px 10px 0" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{professorBean.cancelar}" immediate="true" style="float:left; display: block; font-size: 12px; margin: 0 5px 10px 0" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+		
+		<!-- </div> -->
+		
+		
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

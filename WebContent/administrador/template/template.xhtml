@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Sistema de Controle Acadêmico</title>
+	<h:outputStylesheet library="css" name="estilo.css"/>
+</h:head>
+<h:body>
+<div id="principal">
+	<div id="topo">
+		<h:link outcome="/administrador/index.jsf" >
+			<h:graphicImage library="imagens" name="logo.jpg" style="border:0; margin: 10px 0 0 10px;"/>
+		</h:link>
+		
+		<div id="infoTopo">
+			<h:outputLabel value="Bem vindo(a) #{contextoBean.secretariaLogada.nome}"/>
+			<h:form id="form">
+			
+			<div id="infoTopoTxt">
+				<p:commandLink styleClass="trocarSenha" action="#{senhaBean.buscarUsuario}" value="Trocar senha" oncomplete="senhaDialog.show();" update=":form:senhaDialog"/> |
+				<a id="sair" onclick="document.location='#{request.contextPath}/j_spring_security_logout'" title="Sair" style="text-decoration:underline; cursor: pointer;">
+					Sair
+				</a>
+			</div>
+				
+				<ui:include src="/trocarSenhaDialog.xhtml"></ui:include>
+				
+			</h:form>
+		</div>
+		
+	</div>
+	
+	<div id="menu">
+		<h:form id="formMenuProfessor">
+		
+			<h1 id="menutitulo">Área do Administrador</h1>
+			 
+			<div id="menuprincipal">
+				<ul>
+					<li><h:link value="Gerenciar Secretárias" outcome="/administrador/secretarias/gerenciarSecretarias.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+					<li><h:link value="Gerenciar Usuários" outcome="/administrador/usuarios/gerenciarUsuarios.jsf?faces-redirect=true" onclick="PrimeFaces.monitorDownload(start, stop)"/></li>
+				</ul>
+			</div>
+			
+		</h:form>
+		
+		<ui:include src="/resources/loader/loader.xhtml"/>
+		
+	</div>
+	
+	<div id="conteudo">
+		<ui:insert name="conteudo">
+		
+		</ui:insert>
+	</div>
+		
+	<div id="rodape">
+		
+		<h5 style="text-align: center; color: #0F80B3;">Sistema Desenvolvido como Trabalho de Conclusão de Curso do Aluno Vinicius Silva do Curso de Sistemas de Informação 2014</h5>
+		
+	</div>
+</div>
+
+</h:body>
+</html>

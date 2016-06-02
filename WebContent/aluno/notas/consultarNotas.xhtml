@@ -1,0 +1,102 @@
+<ui:composition template="/aluno/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Consultar Notas</h1>
+	
+	<h:form id="formConsultarNotas">
+	
+		<p:fieldset legend="Buscar Notas" style="font-size:12px; width:950px; margin-bottom: 10px;">
+		
+			<h:panelGrid columns="2">
+			
+				<h:outputLabel for="cbAno" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="cbAno" value="#{notaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodo"  
+	                        listener="#{notaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbTurma"  
+	                        listener="#{notaBean.trocarTurmaAluno}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbPeriodo" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodo" value="#{notaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{notaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+			
+				<h:outputLabel for="cbTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbTurma" value="#{notaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{notaBean.turmasAluno}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{notaBean.consultarNotas}" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formConsultarNotas:accordion :dialog"/>
+		    
+		    </h:panelGrid>
+		    
+		    <h4 style="color: red; font-size: 11px;">Campos marcados com * são obrigatórios</h4>
+		    
+		    <br/>
+		    
+		    <p:accordionPanel id="accordion" value="#{notaBean.pdnList}" var="pdn" multiple="true">
+		    	
+		    	<p:tab title="#{pdn.professorDisciplina.disciplina.descricao} - #{pdn.professorDisciplina.professor.nome}">
+		    	
+		    		<p:dataTable value="#{pdn.notas}" var="nota"
+		    		emptyMessage="Nenhuma nota lançada!"
+		    		style="float: left; display: block; font-size: 12px; border: 0">
+		    		
+			    		<p:columnGroup type="header">
+		    				<p:row>
+		              			<p:column style="width: 369px; float: left; display: block; text-align: center" headerText="Atividade" />
+		              			<p:column style="width: 130px; float: left; display: block; text-align: center" headerText="Data" />
+		              			<p:column style="width: 130px; float: left; display: block; text-align: center" headerText="Valor da Atividade" />
+		              			<p:column style="width: 130px; float: left; display: block; text-align: center" headerText="Nota Obtida" />
+		              		</p:row>
+		    			</p:columnGroup>
+		    		
+		    			<p:column style="width: 369px; float: left; display: block; border: 0;" headerText="Atividade">
+		    				#{nota.atividade.titulo}
+		    			</p:column>
+		    			
+		    			<p:column style="text-align: center; width: 130px; float: left; display: block; border: 0;" headerText="Data">
+		    				<h:outputLabel value="#{nota.atividade.dataFim}">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:outputLabel>
+		    			</p:column>
+		    			
+		    			<p:column style="text-align: center; width: 130px; float: left; display: block; border: 0;" headerText="Valor da Atividade">
+		    				#{nota.atividade.valor}
+		    			</p:column>
+		    			
+		    			<p:column style="text-align: center; width: 130px; float: left; display: block; border: 0;" headerText="Nota Obtida">
+		    				#{nota.valor}
+		    			</p:column>
+		    			
+		    			<p:columnGroup type="footer">
+		    				<p:row>
+                				<p:column style="width: 520px; float: left; display: block; text-align:right" footerText="Total:" />
+                				<p:column style="width: 130px; float: left; display: block; text-align:right" footerText="#{notaBean.somarValorAtividade(pdn.notas)}" />
+                				<p:column style="width: 130px; float: left; display: block; text-align:right" footerText="#{notaBean.somarNotaObtida(pdn.notas)}" />
+                			</p:row>
+		    			</p:columnGroup>
+		    			
+		    		</p:dataTable>
+		    	
+		    	</p:tab>
+		    
+		    </p:accordionPanel>
+		
+		</p:fieldset>
+	
+	</h:form>
+
+</ui:define>
+</ui:composition>

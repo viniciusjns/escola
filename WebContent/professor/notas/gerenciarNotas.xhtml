@@ -1,0 +1,121 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Notas</h1>
+	
+	<h:form id="formPostarNotas">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgNotas" closable="true"/>
+		</div>
+		
+		<p:fieldset id="fieldBuscarNotas" legend="Buscar Notas" style="font-size: 12px; margin-top: 10px;" rendered="#{notaBean.painel1}">
+		
+			<h:panelGrid id="painelBuscarNotas" columns="2">
+			
+				<h:outputLabel for="cbAno" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="cbAno" value="#{notaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodo"  
+	                        listener="#{notaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbTurma"  
+	                        listener="#{notaBean.trocarTurmaProfessor}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbPeriodo" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodo" value="#{notaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{notaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbTurma" value="#{notaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{notaBean.turmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <p:commandButton value="Buscar Atividades" icon="ui-icon-search" action="#{notaBean.buscarAtividades}" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formPostarNotas :dialog">
+			    	<f:setPropertyActionListener target="#{notaBean.painel1}" value="#{false}"/>
+			    	<f:setPropertyActionListener target="#{notaBean.painel2}" value="#{true}"/>
+			    </p:commandButton>
+			
+			</h:panelGrid>
+			
+			<h4 style="color: red; font-size: 11px; ">Campos marcados com * são obrigatórios</h4>
+		
+		</p:fieldset>
+		
+		<p:fieldset id="fieldAtividade" legend="Atividade" rendered="#{notaBean.atividades != null and notaBean.painel2}" style="font-size: 12px; margin-top: 10px;">
+		
+			<h:panelGrid id="painelBuscarAtividades" columns="2">
+		
+				<h:outputLabel for="cbAtividade" value="Selecione uma atividade: *"/>
+				<p:selectOneMenu id="cbAtividade" value="#{notaBean.idAtividadeSelecionada}" rendered="#{notaBean.atividades != null}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{notaBean.atividades}" var="atividade" itemLabel="#{atividade.titulo}" itemValue="#{atividade.idAtividade}" />
+			    </p:selectOneMenu>
+			   
+			</h:panelGrid>
+			
+			<p:commandButton value="Buscar Alunos" icon="ui-icon-search" action="#{notaBean.buscarAlunos}" onclick="PrimeFaces.monitorDownload(start, stop)" rendered="#{!empty notaBean.atividades}" update=":formPostarNotas :dialog" style="margin: 0 5px 0 0;">
+		    	<f:setPropertyActionListener target="#{notaBean.painel2}" value="#{false}"/>
+		    </p:commandButton>
+		    
+		    <p:commandButton value="Cancelar" icon="ui-icon-cancel" update=":formPostarNotas">
+		    	<f:setPropertyActionListener target="#{notaBean.painel1}" value="#{true}"/>
+		    	<f:setPropertyActionListener target="#{notaBean.painel2}" value="#{false}"/>
+		    </p:commandButton>
+		    
+		    <h4 style="color: red; font-size: 11px; ">Campos marcados com * são obrigatórios</h4>
+		
+		</p:fieldset>
+		
+		<p:fieldset legend="Lista de Alunos" rendered="#{!empty notaBean.atividades and notaBean.idAtividadeSelecionada != 0}" style="font-size: 12px; margin: 10px 0 10px 0;">
+		
+			<p:dataTable id="tabela" var="nota" value="#{notaBean.notas}"
+	                emptyMessage="Nenhum aluno encontrado"
+	                editable="true" editMode="cell"
+					style="font-size: 12px; text-align: center;">
+					
+				<f:facet name="header">#{notaBean.atividade.titulo} - valor: #{notaBean.atividade.valor} pto(s)</f:facet>
+				
+				<p:ajax event="cellEdit" listener="#{notaBean.onCellEdit}"/>
+			
+				<p:column headerText="Código">
+					#{nota.alunoTurma.idAlunoTurma}
+				</p:column>
+			
+				<p:column headerText="Aluno" sortBy="#{nota.alunoTurma.aluno.nome}">
+					#{nota.alunoTurma.aluno.nome}
+				</p:column>
+				
+				<p:column headerText="Nota">
+					<p:cellEditor>
+		               <f:facet name="output"><h:outputText value="#{nota.valor}" /></f:facet>
+		               <f:facet name="input"><p:inputText value="#{nota.valor}" size="5" maxlength="5" style="text-align: right;" label="Nota"/></f:facet>
+		           </p:cellEditor>
+				</p:column>
+			
+			</p:dataTable>
+			
+			<p:commandButton value="Salvar" icon="ui-icon-check" action="#{notaBean.salvar}" onclick="PrimeFaces.monitorDownload(start, stop)" update=":formPostarNotas:msgNotas :dialog" style="margin: 5px 5px 0 0;"/>
+			<p:commandButton value="Cancelar" icon="ui-icon-cancel" update=":formPostarNotas">
+				<f:setPropertyActionListener target="#{notaBean.painel2}" value="#{true}"/>
+				<f:setPropertyActionListener target="#{notaBean.idAtividadeSelecionada}" value="#{0}"/>
+			</p:commandButton>
+		
+		</p:fieldset>
+		
+		
+	
+	</h:form>
+	
+</ui:define>
+</ui:composition>

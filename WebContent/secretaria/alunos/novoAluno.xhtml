@@ -1,0 +1,110 @@
+<ui:composition template="/secretaria/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Alunos</h1>
+	
+	<h:form id="formCadastrarAluno">
+	
+		<div style="font-size: 12px; width:400px;">
+			<p:growl id="msgNovoAluno" closable="true"/>
+		</div>
+		
+		<h:inputHidden value="#{alunoBean.aluno.idPessoa}"/>
+		<h:inputHidden value="#{alunoBean.endereco.idEndereco}"/>
+		<h:inputHidden value="#{alunoBean.telefone1.idTelefone}"/>
+		<h:inputHidden value="#{alunoBean.telefone2.idTelefone}"/>
+		
+		<!-- <div style="float:left; display: table; border: 1px solid #fff; width: 865px; height: 350px;"> -->
+		
+			<!-- <div style="border: 1px solid #fff; float: left;"> -->
+			<p:fieldset legend="Informações Pessoais" style="font-size:12px; width:420px;">
+				<h:panelGrid columns="2">
+					
+					<h:outputLabel for="nomeAluno" value="Nome Completo: *"/>
+					<p:inputText id="nomeAluno" value="#{alunoBean.aluno.nome}" required="true" requiredMessage="Preencha o nome do aluno!" size="30" maxlength="80"/>
+					
+					<h:outputLabel for="dtNascAluno" value="Data Nascimento: *"/>
+					<p:calendar value="#{alunoBean.aluno.dataNascimento}" id="dtNascAluno" locale="pt_BR"
+										 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2014" mindate="01/01/1990" required="true" requiredMessage="Preencha a data de nascimento!" size="10" maxlength="10"/>
+					
+					<h:outputLabel for="sexoAluno" value="Sexo: *"/>
+					<p:selectOneMenu id="sexoAluno" value="#{alunoBean.idSexo}" required="true" requiredMessage="Selecione um sexo!">
+						<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{alunoBean.buscarSexo}" var="sexo" itemLabel="#{sexo.descricao}" itemValue="#{sexo.idSexo}" />
+			        </p:selectOneMenu>
+					
+					<h:outputLabel for="cpfAluno" value="CPF: "/>
+					<p:inputMask mask="999.999.999-99" id="cpfAluno" value="#{alunoBean.aluno.cpf}" size="15" maxlength="14"/>
+					
+					<h:outputLabel for="emailAluno" value="E-mail: *"/>
+					<p:inputText id="emailAluno" value="#{alunoBean.aluno.email}" required="true" requiredMessage="Preencha o e-mail!" size="30" maxlength="80"/>
+					
+					<h:outputLabel for="telAluno" value="Telefone: *"/>
+					<p:inputMask mask="(99)9999-9999" id="telAluno" value="#{alunoBean.telefone1.numero}" required="true" requiredMessage="Preencha o telefone!" size="15" maxlength="13"/>
+					
+					<h:outputLabel for="celAluno" value="Celular: *"/>
+					<p:inputMask mask="(99)9999-9999" id="celAluno" value="#{alunoBean.telefone2.numero}" required="true" requiredMessage="Preencha o celular" size="15" maxlength="13"/>
+					
+					<h:outputLabel for="nomePaiAluno" value="Nome Completo do Pai: "/>
+					<p:inputText id="nomePaiAluno" value="#{alunoBean.aluno.nomePai}" size="30" maxlength="80"/>
+					
+					<h:outputLabel for="nomeMaeAluno" value="Nome Completo da Mãe: *"/>
+					<p:inputText id="nomeMaeAluno" value="#{alunoBean.aluno.nomeMae}" required="true" requiredMessage="Preencha o nome da mãe!" size="30" maxlength="80"/>
+					
+					<h:outputLabel for="obsAluno" value="Observação: "/>
+					<p:inputTextarea id="obsAluno" value="#{alunoBean.aluno.observacao}" rows="5" cols="30"/>
+				
+				</h:panelGrid>
+			</p:fieldset>
+			<!-- </div> -->
+			
+			<!-- <div style="border: 1px solid #fff; float: left;"> -->
+			<p:fieldset legend="Endereço" style="font-size:12px; width:420px; height: 240px; margin: 10px 0 10px 0">
+				<h:panelGrid columns="2">
+					
+					<h:outputLabel for="logradouroAluno" value="Logradouro: *"/>
+					<p:inputText id="logradouroAluno" value="#{alunoBean.endereco.logradouro}" required="true" requiredMessage="Preencha o campo logradouro!" size="30" maxlength="80"/>
+					
+					<h:outputLabel for="numeroLogradouroAluno" value="Número: *"/>
+					<p:inputText id="numeroLogradouroAluno" value="#{alunoBean.endereco.numero}" required="true" requiredMessage="Preencha o campo número!" size="8" maxlength="6"/>
+					
+					<h:outputLabel for="bairroAluno" value="Bairro: *"/>
+					<p:inputText id="bairroAluno" value="#{alunoBean.endereco.bairro}" required="true" requiredMessage="Preencha o campo bairro!" size="20" maxlength="50"/>
+					
+					<h:outputLabel for="cidadeAluno" value="Cidade: *"/>
+					<p:inputText id="cidadeAluno" value="#{alunoBean.endereco.cidade}" required="true" requiredMessage="Preencha o campo cidade!" size="20" maxlength="50"/>
+					
+					<h:outputLabel for="cepAluno" value="CEP: *"/>
+					<p:inputMask mask="99999-999" id="cepAluno" value="#{alunoBean.endereco.cep}" required="true" requiredMessage="Preencha o campo CEP!" size="10" maxlength="8"/>
+					
+					<h:outputLabel for="ufAluno" value="UF: *"/>
+					<p:selectOneMenu id="ufAluno" value="#{alunoBean.idUf}" required="true" requiredMessage="Selecione um UF!">
+						<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+			            <f:selectItems value="#{enderecoBean.buscarUf}" var="uf" itemLabel="#{uf.descricao}" itemValue="#{uf.idUf}" />
+			        </p:selectOneMenu>
+			        
+			        <h:outputLabel for="complementoAluno" value="Complemento: "/>
+					<p:inputText id="complementoAluno" value="#{alunoBean.endereco.complemento}" size="20" maxlength="50"/>
+					
+				</h:panelGrid>
+			</p:fieldset>
+			<!-- </div> -->
+			<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+			
+			<p:commandButton value="Salvar" icon="ui-icon-check" action="#{alunoBean.salvar}" update=":formCadastrarAluno :formCadastrarAluno:msgNovoAluno :dialog" style="float:left; display: block; font-size: 12px; margin: 0 5px 10px 0" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+			<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{alunoBean.cancelar}" immediate="true" style="float:left; display: block; font-size: 12px; margin: 0 0 10px 0" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+		
+		<!-- </div> -->
+		
+		
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

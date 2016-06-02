@@ -1,0 +1,71 @@
+<ui:composition template="/administrador/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Bloquear Usuários</h1>
+	
+	<h:form id="formNovaSecretaria">
+		<p:commandButton style="font-size: 12px; margin: 0 0 5px 0; width:0px; height: 0px; border: none; background-color: #fff;"/>
+	</h:form>
+	
+	<h:form id="formUsuario">
+		<div style="font-size: 12px;">
+			<p:growl id="msgUsuario"/>
+		</div>
+		<p:dataTable id="dataTable" var="usuario" value="#{usuarioBean.usuarioList}"  
+                 paginator="true" rows="10"  
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="10,25,50,100"
+                 emptyMessage="Nenhum usuário encontrado"
+                 filteredValue="#{usuarioBean.filteredUsuario}"
+                 style="font-size: 12px; text-align: center;">
+                 
+			<f:facet name="header">Usuários Cadastrados</f:facet>
+			
+			<p:column headerText="Ativo">
+                	<p:commandLink action="#{usuarioBean.ativarDesativar}" update=":formUsuario">
+                		<p:graphicImage library="imagens" name="cadeado_#{usuario.ativo}.png"/>
+                		<f:setPropertyActionListener target="#{usuarioBean.usuario}" value="#{usuario}"/>
+                	</p:commandLink>
+                </p:column>
+			
+			<p:column headerText="Código">
+				#{usuario.pessoa.idPessoa}
+			</p:column>
+			
+			<p:column headerText="Nome" filterBy="pessoa.nome" filterMatchMode="contains">
+				#{usuario.pessoa.nome}
+			</p:column>
+						
+			<p:column headerText="CPF" filterBy="pessoa.cpf" filterMatchMode="contains">
+				#{usuario.pessoa.cpf}
+			</p:column>	
+			
+			<p:column headerText="E-mail" filterBy="pessoa.email" filterMatchMode="contains">
+				#{usuario.pessoa.email}
+			</p:column>
+			
+			<p:column headerText="Excluir">
+				<p:commandLink action="#{usuarioBean.excluir}" update=":formUsuario:dataTable, :formUsuario:msgUsuario">
+					<h:graphicImage library="imagens" name="excluir.png" style="border:0"/>
+					<f:setPropertyActionListener target="#{usuarioBean.usuario}" value="#{usuario}"/>
+					<p:confirm header="Excluir" message="Deseja excluir registro?" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+		
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" style="font-size: 12px">  
+	        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+	        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+	    </p:confirmDialog>
+		
+	</h:form>
+
+</ui:define>
+</ui:composition>

@@ -1,0 +1,78 @@
+<ui:composition template="/professor/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Gerenciar Atividade Sem Entrega</h1>
+	
+	<h:form id="formCadastrarAtividade">
+	
+		<div style="font-size: 12px;">
+			<p:growl id="msgAtividade"/>
+		</div>
+	
+		<h:inputHidden value="#{atividadeSemEntregaBean.atividadeSemEntrega.idAtividade}"/>
+	
+		<p:fieldset legend="Atividade Sem Entrega" style="font-size:12px; width:700px;">
+		
+			<h:panelGrid id="painelSemEntrega" columns="2">
+		        
+		        <h:outputLabel for="tituloAtividade" value="Título: *"/>
+		        <p:inputText id="tituloAtividade" value="#{atividadeSemEntregaBean.atividadeSemEntrega.titulo}" size="50" maxlength="45" required="true" requiredMessage="Preencha o campo título!"/>
+		        
+		        <h:outputLabel for="valorAtividade" value="Valor: *"/>
+		        <p:inputText id="valorAtividade" value="#{atividadeSemEntregaBean.atividadeSemEntrega.valor}" size="10" required="true" requiredMessage="Preencha o campo valor!"/>
+		        
+		        <h:outputLabel for="anoAtividade" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="anoAtividade" value="#{atividadeSemEntregaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodoAtividade"  
+	                        listener="#{atividadeSemEntregaBean.trocarPeriodoLetivo}"/>
+	                <p:ajax update="cbAtvTurma"  
+	                        listener="#{atividadeSemEntregaBean.trocarTurmaProfessor}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbPeriodoAtividade" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodoAtividade" value="#{atividadeSemEntregaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeSemEntregaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbAtvTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbAtvTurma" value="#{atividadeSemEntregaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeSemEntregaBean.turmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			        <p:ajax update="cbAtvDisciplina"  
+	                        listener="#{atividadeSemEntregaBean.trocarDisciplina}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbAtvDisciplina" value="Selecione a disciplina: *"/>
+				<p:selectOneMenu id="cbAtvDisciplina" value="#{atividadeSemEntregaBean.idDisciplinaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeSemEntregaBean.disciplinas}" var="disciplina" itemLabel="#{disciplina.descricao}" itemValue="#{disciplina.idDisciplina}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="data" value="Data: *"/>
+				<p:calendar value="#{atividadeSemEntregaBean.atividadeSemEntrega.dataFim}" id="data" locale="pt_BR"
+										 navigator="true" pattern="dd/MM/yyyy" showOn="button" maxdate="31/12/2020" mindate="01/01/2014" required="true" requiredMessage="Escolha uma data!" size="10" maxlength="10"/>
+			    
+			
+			</h:panelGrid>
+		</p:fieldset>
+		
+		<h4 style="color: red">Campos marcados com * são obrigatórios</h4>
+		
+		<p:commandButton icon="ui-icon-check" value="Salvar" action="#{atividadeSemEntregaBean.salvar}" update=":formCadastrarAtividade:msgAtividade" style="font-size: 12px; margin: 0 5px 10px 0;" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+		<p:commandButton icon="ui-icon-cancel" value="Cancelar" action="#{atividadeSemEntregaBean.cancelar}" immediate="true" style="font-size: 12px;"/>
+		
+	</h:form>
+	
+	
+
+</ui:define>
+</ui:composition>

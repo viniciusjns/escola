@@ -1,0 +1,107 @@
+<ui:composition template="/aluno/template/template.xhtml" 
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+<ui:define name="conteudo">
+
+	<h1 id="titulo">Consultar Atividades</h1>
+	
+	<h:form id="formConsultarAtividades">
+	
+		<p:fieldset legend="Buscar Atividades" style="font-size:12px; width:920px;">
+		
+			<h:panelGrid id="painel" columns="2">
+			
+				<h:outputLabel for="anoAtividade" value="Selecione o ano: *"/>
+		        <p:selectOneMenu id="anoAtividade" value="#{atividadeComEntregaBean.idAnoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{periodoLetivoBean.buscarAno}" var="ano" itemLabel="#{ano.descricao}" itemValue="#{ano.idAno}" />
+			        <p:ajax update="cbPeriodoAtividade"  
+	                        listener="#{atividadeComEntregaBean.trocarPeriodoLetivo}" />
+	                <p:ajax update="cbAtvTurma"  
+	                        listener="#{atividadeComEntregaBean.trocarTurmaAluno}" />
+			    </p:selectOneMenu>
+		        
+		        <h:outputLabel for="cbPeriodoAtividade" value="Selecione o período letivo: *"/>
+				<p:selectOneMenu id="cbPeriodoAtividade" value="#{atividadeComEntregaBean.idPeriodoSelecionado}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeComEntregaBean.periodos}" var="periodo" itemLabel="#{periodo.descricao}" itemValue="#{periodo.idPeriodoLetivo}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="cbAtvTurma" value="Selecione a turma: *"/>
+				<p:selectOneMenu id="cbAtvTurma" value="#{atividadeComEntregaBean.idTurmaSelecionada}">
+					<f:selectItem itemLabel="" itemValue=""/>
+			        <f:selectItems value="#{atividadeComEntregaBean.alunoTurmas}" var="turma" itemLabel="#{turma.descricao}" itemValue="#{turma.idTurma}" />
+			    </p:selectOneMenu>
+			    
+			    <h:outputLabel for="situacaoAtv" value="Situação: *"/>
+			    <p:selectOneMenu id="situacaoAtv" value="#{atividadeComEntregaBean.idSituacao}" required="true" requiredMessage="Selecione uma situação!">
+			    	<f:selectItem itemLabel="Em andamento" itemValue="1"/>
+			    	<f:selectItem itemLabel="Encerrado" itemValue="2"/>
+			    </p:selectOneMenu>
+			    
+			    <p:commandButton value="Buscar" icon="ui-icon-search" action="#{atividadeComEntregaBean.buscarAtividades}" update=":formConsultarAtividades:dataTable :formConsultarAtividades:dialog" onclick="PrimeFaces.monitorDownload(start, stop)"/>
+			
+			</h:panelGrid>
+			
+			<h4 style="color: red; font-size: 11px;">Campos marcados com * são obrigatórios</h4>
+		
+		</p:fieldset>
+		
+		<p:fieldset legend="Lista de Atividades" style="font-size:12px; width:920px; margin-top: 10px;">
+		
+			<p:dataTable id="dataTable" var="atividade" value="#{atividadeComEntregaBean.atividadesComEntrega}"
+					paginator="true" rows="10"  
+	                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+	                rowsPerPageTemplate="10,25,50,100"
+	                emptyMessage="Nenhuma atividade encontrada"
+	                filteredValue="#{atividadeComEntregaBean.filteredAtividade}"
+					style="font-size: 12px; text-align: center;">
+					
+					<p:column headerText="Código">
+						#{atividade.idAtividade}
+					</p:column>
+					
+					<p:column headerText="Título" sortBy="#{atividade.titulo}">
+						#{atividade.titulo}
+					</p:column>
+					
+					<p:column headerText="Disciplina" sortBy="#{atividade.professorTurma.professorDisciplina.disciplina.descricao}">
+						#{atividade.professorTurma.professorDisciplina.disciplina.descricao}
+					</p:column>
+					
+					<p:column headerText="Data Fim">
+						<h:outputLabel value="#{atividade.dataFim}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputLabel>
+					</p:column>
+					
+					<p:column headerText="Hora Fim">
+						#{atividade.horaFim}
+					</p:column>
+					
+					<p:column headerText="Entregou">
+						<h:outputLabel value="#{entregaBean.verificarEntrega(atividade)}" style="color: #{entregaBean.verificarEntrega(atividade) == 'Sim' ? 'green' : 'red'};"/>
+					</p:column>
+					
+					<p:column headerText="Detalhar">
+						<p:commandLink action="#{entregaBean.buscarEntregaPorIdAlunoIdAtividade}" >
+							<h:graphicImage library="imagens" name="buscar.png"/>
+							<f:setPropertyActionListener target="#{atividadeComEntregaBean.atividadeSelecionada}" value="#{atividade}"/>
+							<f:setPropertyActionListener target="#{entregaBean.atividade}" value="#{atividade}"/>
+						</p:commandLink>
+					</p:column>
+			
+			</p:dataTable>
+		
+		</p:fieldset>
+		
+		<ui:include src="/resources/loader/loader.xhtml"/>
+	
+	</h:form>
+
+</ui:define>
+</ui:composition>
